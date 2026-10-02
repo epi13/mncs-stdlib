@@ -1,0 +1,497 @@
+{
+  "bundle_identity": "mncs:stdlib-bundle:702ef9426c07e0f5a6acf0b4048734c1fdf2e581ef596362532dcbe6f03b49c3",
+  "bundle_path": "dist/stdlib-bundle.json",
+  "library_path": "library",
+  "module_count": 61,
+  "modules": [
+    {
+      "content_sha256": "ed11a325208e0450ad196998c297f33ac2cae3f810ea29089f9cdd07ac6d0f62",
+      "imports": [],
+      "name": "mncs.core.bounds.v1",
+      "path": "core/bounds.mncs",
+      "profile": "0.5"
+    },
+    {
+      "content_sha256": "02a87c9fe7c8c5f8eee9e177c5090bd57614ad6a05b84a339ebab5b90f61f337",
+      "imports": [],
+      "name": "mncs.core.bytes.v1",
+      "path": "core/bytes.mncs",
+      "profile": "0.7"
+    },
+    {
+      "content_sha256": "343902e73e4a6b0bb07e078906da2ed1e5f3c1b1a11971245ab347e0875938cb",
+      "imports": [
+        "mncs.core.logic.v1"
+      ],
+      "name": "mncs.core.contracts.v1",
+      "path": "core/contracts.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "6ea8f9a6a160a707048fef415b3a4e5d07b7f72b1e01914e84cfbe08fbddb0ca",
+      "imports": [
+        "mncs.core.ordering.v1"
+      ],
+      "name": "mncs.core.geometry.v1",
+      "path": "core/geometry.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "0348822874eab9bfa496024809b36983e1a00e8241357a753dc79148faa528d2",
+      "imports": [],
+      "name": "mncs.core.identity.v1",
+      "path": "core/identity.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "cc53b671cfd4eda6275ed5d07610e776a132a00e59e9288e980d65750ae36138",
+      "imports": [
+        "mncs.core.contracts.v1"
+      ],
+      "name": "mncs.core.image.v1",
+      "path": "core/image.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "b26698131716bdbdc6baf34a4f33d7c0477a43c5641dba2a5c53f6477c6ae061",
+      "imports": [
+        "mncs.core.identity.v1"
+      ],
+      "name": "mncs.core.lineage.v1",
+      "path": "core/lineage.mncs",
+      "profile": "0.10"
+    },
+    {
+      "content_sha256": "3cc836943a01ff32ee3efd690f4b9de0c5757dd9718af33ed48ae924588ac32a",
+      "imports": [],
+      "name": "mncs.core.logic.v1",
+      "path": "core/logic.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "8a979917d86ca80bf61d65bcf737f22c735ecb648fd9773765d4b5fabbaf70b7",
+      "imports": [],
+      "name": "mncs.core.mask.v1",
+      "path": "core/mask.mncs",
+      "profile": "0.8"
+    },
+    {
+      "content_sha256": "567c2ed24d833a597670176b2c7be09cb73788aee6e860429a8eed24a01b863c",
+      "imports": [
+        "mncs.core.ordering.v1"
+      ],
+      "name": "mncs.core.numeric.v1",
+      "path": "core/numeric.mncs",
+      "profile": "0.8"
+    },
+    {
+      "content_sha256": "5773304071aab4adc80ada57aa00f8ea94949b74f9c1b32852d7571e4117f76d",
+      "imports": [],
+      "name": "mncs.core.ordering.v1",
+      "path": "core/ordering.mncs",
+      "profile": "0.5"
+    },
+    {
+      "content_sha256": "e942038c0143515c4a7877ba16e025b35a2a52270acdcea99b2fc6b56b6d8e9f",
+      "imports": [],
+      "name": "mncs.core.partition.v1",
+      "path": "core/partition.mncs",
+      "profile": "0.8"
+    },
+    {
+      "content_sha256": "ccdff8991beeff8144669e3888b19b83a4ee0fa5e53c9c63bf5724160b9c7d58",
+      "imports": [
+        "mncs.core.proof_dep.v2"
+      ],
+      "name": "mncs.core.proof_admit.v1",
+      "path": "core/proof_admit.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "de683d8680f697a60c4c406c607d0bea501ffe703546e20a8c860bbeb26884c6",
+      "imports": [
+        "mncs.core.proof_term.v1",
+        "mncs.core.status.v1"
+      ],
+      "name": "mncs.core.proof_check.v1",
+      "path": "core/proof_check.mncs",
+      "profile": "0.10"
+    },
+    {
+      "content_sha256": "782f74d6354a824891c8c27bc4b855127508d7fded0cd21b567419e28ef3aa61",
+      "imports": [
+        "mncs.core.status.v1"
+      ],
+      "name": "mncs.core.proof_dep.v2",
+      "path": "core/proof_dep.mncs",
+      "profile": "0.10"
+    },
+    {
+      "content_sha256": "158550265441cd2189bb40ded0118d9cb228027d41d4d64059d56b9b81be7c33",
+      "imports": [],
+      "name": "mncs.core.proof_term.v1",
+      "path": "core/proof_term.mncs",
+      "profile": "0.10"
+    },
+    {
+      "content_sha256": "98c9628fbcb7942d9249e97486f9e42a77a04bc5a04af7882d812cc6311d78a4",
+      "imports": [],
+      "name": "mncs.core.random.v1",
+      "path": "core/random.mncs",
+      "profile": "0.6"
+    },
+    {
+      "content_sha256": "37ab3f0187ee27fc334ebe1feae6d11eb38b495e4014da874634e65dbc34b9ad",
+      "imports": [],
+      "name": "mncs.core.result.v1",
+      "path": "core/result.mncs",
+      "profile": "0.6"
+    },
+    {
+      "content_sha256": "ef8fc2bdb651071fdba8c9d8b3ec520db5dee5b2b27ad310c5ff727f1f23731c",
+      "imports": [],
+      "name": "mncs.core.sequences.v1",
+      "path": "core/sequences.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "7690a6d6bff4d74cb60fa930a87d078db8d31a0a7e7533a876ed7daa7cd52ff6",
+      "imports": [],
+      "name": "mncs.core.status.v1",
+      "path": "core/status.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "8e4b72d710a6a928186c547cda613b77587ea73d77cbc0dfdcf3d5ff2bfb2259",
+      "imports": [],
+      "name": "mncs.core.vector.v1",
+      "path": "core/vector.mncs",
+      "profile": "0.8"
+    },
+    {
+      "content_sha256": "686a9a08d0739b6e7c6fd43b3dda2fd3c74463deb293fccb634cb547d5272c3b",
+      "imports": [],
+      "name": "mncs.core.version.v1",
+      "path": "core/version.mncs",
+      "profile": "0.6"
+    },
+    {
+      "content_sha256": "41f8b1a80caf3f61b18979bf874b8508388a9c37459e86de2ad7ca20c38d6227",
+      "imports": [
+        "mncs.core.contracts.v1",
+        "mncs.core.geometry.v1",
+        "mncs.core.image.v1"
+      ],
+      "name": "mncs.core.vision.v1",
+      "path": "core/vision.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "7f9230b52c6ae95732006287527991f859534c34e7591fc53a0b13127cd017cf",
+      "imports": [
+        "mncs.core.status.v1",
+        "mncs.core.version.v1"
+      ],
+      "name": "mncs.family.coherence.v01",
+      "path": "family/coherence.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "a9cfa0e10dfbeccce0b83ebfbcdf6f0dba5faea157bff74f0cb74183fb1c22c9",
+      "imports": [
+        "mncs.core.identity.v1",
+        "mncs.core.lineage.v1",
+        "mncs.core.status.v1"
+      ],
+      "name": "mncs.family.journal.v1",
+      "path": "family/journal.mncs",
+      "profile": "0.10"
+    },
+    {
+      "content_sha256": "bd8afffcd37a1381ebdfc733074924776a959b0fcefce54684498c4fbfca1594",
+      "imports": [
+        "mncs.core.status.v1"
+      ],
+      "name": "mncs.family.rfc_status.v1",
+      "path": "family/rfc_status.mncs",
+      "profile": "0.10"
+    },
+    {
+      "content_sha256": "9517c094badc3c60bbd7fd0f236b3d5a23d26f5c479b2c317dc45751f121cbd0",
+      "imports": [
+        "mncs.jit.lifecycle.v1",
+        "mncs.jit.proof.v1",
+        "mncs.jit.session.v1",
+        "mncs.jit.types.v1"
+      ],
+      "name": "mncs.jit.binding.v1",
+      "path": "jit/binding.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "4a07aaed3e0385fca8d17f6999876cabefcb72cd26d28b4a39f32edfcf0f10ac",
+      "imports": [
+        "mncs.jit.types.v1"
+      ],
+      "name": "mncs.jit.depends.v1",
+      "path": "jit/depends.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "f4656413e1bc5f19950407749b6cc21f68c1d98d7e753a4317be6aaa9bf0e622",
+      "imports": [
+        "mncs.jit.types.v1"
+      ],
+      "name": "mncs.jit.lifecycle.v1",
+      "path": "jit/lifecycle.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "6c5e71ce936f72157876c35f7a82f8f3f22258f1c13bc94a17513507b54213ef",
+      "imports": [
+        "mncs.jit.types.v1"
+      ],
+      "name": "mncs.jit.plan.v1",
+      "path": "jit/plan.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "366038a748de23925abfc39a4d6c0dc89eef9cb5b5c4ac58d145d8d2e39c3415",
+      "imports": [],
+      "name": "mncs.jit.profile.v1",
+      "path": "jit/profile.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "9df360436fc3f1d85ac5506232ab6755295f736b472643736829d965bca3ea19",
+      "imports": [],
+      "name": "mncs.jit.proof.v1",
+      "path": "jit/proof.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "731c0e25ee0c66885810aeec9674aab87e2070048a87219eafbbed670f01f5c5",
+      "imports": [
+        "mncs.jit.depends.v1",
+        "mncs.jit.lifecycle.v1",
+        "mncs.jit.types.v1"
+      ],
+      "name": "mncs.jit.session.v1",
+      "path": "jit/session.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "2017f25e2c0df0a00e651fc330459d56967c4b82e29886a992cda950fdc27fb5",
+      "imports": [],
+      "name": "mncs.jit.types.v1",
+      "path": "jit/types.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "634e6acece32a5875e448a8b03c06cecb602a5326950c0f81b60fb928ae37e53",
+      "imports": [
+        "mncs.core.bytes.v1"
+      ],
+      "name": "mncs.std.ansi.v1",
+      "path": "std/ansi.mncs",
+      "profile": "0.8"
+    },
+    {
+      "content_sha256": "d10591c3f9ec3e5b4c72bdef0ae9e0e2a0fcf1f120acc6379491c8528088b0e0",
+      "imports": [],
+      "name": "mncs.std.application.v1",
+      "path": "std/application.mncs",
+      "profile": "0.16"
+    },
+    {
+      "content_sha256": "b8f76368658b8add78e2c0df7baab89bde173ac2b3b669422c93e5f777165b31",
+      "imports": [],
+      "name": "mncs.std.channel.v1",
+      "path": "std/channel.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "70e505eec17a7cc10c8e8fb4cf549a412758527570a85040dac739595b658311",
+      "imports": [],
+      "name": "mncs.std.chunk.v1",
+      "path": "std/chunk.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "a825fe196cc3569576e2cadd2106b1b298be562df4582c5d6b9440221e0773b6",
+      "imports": [],
+      "name": "mncs.std.clock.v1",
+      "path": "std/clock.mncs",
+      "profile": "0.10"
+    },
+    {
+      "content_sha256": "86c3cab77708b87dc2d01ff484416ebf815ef6c0c3b0776fde99745f3b8eb9c5",
+      "imports": [],
+      "name": "mncs.std.encoding.v1",
+      "path": "std/encoding.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "62bc1be04c3af5f6413362799dab3bb652f6c741a32f3cb46162b9e2eefa9899",
+      "imports": [],
+      "name": "mncs.std.fixed.v1",
+      "path": "std/fixed.mncs",
+      "profile": "0.6"
+    },
+    {
+      "content_sha256": "33502607a12639ea8a75def86a4ed7093018b5c0a9ca838a1fa8385516373590",
+      "imports": [],
+      "name": "mncs.std.fnv1a.v1",
+      "path": "std/fnv1a.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "bbf08cfd0b220b5ed50aa3276cdd099efb518820f187841b5a5f2dd51418506c",
+      "imports": [],
+      "name": "mncs.std.json.v1",
+      "path": "std/json.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "3ac6292bbff6f7c531aca51b1c83b5674540397a76cced1a47026da7ad71e36e",
+      "imports": [],
+      "name": "mncs.std.json_cursor.v1",
+      "path": "std/json_cursor.mncs",
+      "profile": "0.10"
+    },
+    {
+      "content_sha256": "509b80aa679dfadffcb526d96aa4da28fb612bc75976dc955b62be9222dd84dd",
+      "imports": [],
+      "name": "mncs.std.json_emit.v1",
+      "path": "std/json_emit.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "d6927c358ec88d62c4d0d93ca063d32dc6bbe431c76dac98ca789eb606f6925b",
+      "imports": [],
+      "name": "mncs.std.json_projection.v1",
+      "path": "std/json_projection.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "fa5f414698be449b0336949733d901e61bdb3ca99c50bac232c543e6a5cdc707",
+      "imports": [],
+      "name": "mncs.std.json_stream.v1",
+      "path": "std/json_stream.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "bc07d20cc2790928877c618dd046644265d82c84bea50f9ef174508f3627702e",
+      "imports": [],
+      "name": "mncs.std.platform.v1",
+      "path": "std/platform.mncs",
+      "profile": "0.6"
+    },
+    {
+      "content_sha256": "40ba08b66a095e791d6aa3b55fe67c3bb5dc3421be660bb0c6ef4d78cc9d928c",
+      "imports": [],
+      "name": "mncs.std.process.v1",
+      "path": "std/process.mncs",
+      "profile": "0.18"
+    },
+    {
+      "content_sha256": "f0fcd04818e5286f7a696927922b0bc16e849dc88a128a1be58454d1fb528971",
+      "imports": [],
+      "name": "mncs.std.relation.v1",
+      "path": "std/relation.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "cff2b5ce6cc05c2bcaea9779f61bc4d77d79644250532d25aabe6936a6aad873",
+      "imports": [],
+      "name": "mncs.std.scope.v1",
+      "path": "std/scope.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "9065c75f7b3e3ea81f4786ff587b0e47da1eed82b70fe9d166340b695fffff6c",
+      "imports": [
+        "mncs.std.encoding.v1"
+      ],
+      "name": "mncs.std.sha256.v1",
+      "path": "std/sha256.mncs",
+      "profile": "0.14"
+    },
+    {
+      "content_sha256": "c50c38f9c5d92c7f63ed5287ef1394df9c498ee14cab22f3a76b499b55b785d1",
+      "imports": [],
+      "name": "mncs.std.simd.v1",
+      "path": "std/simd.mncs",
+      "profile": "0.8"
+    },
+    {
+      "content_sha256": "9fb698dbd9c40abe2bb963afd157c27ab0bf04dd1fcfb7656549e31069f0f08e",
+      "imports": [],
+      "name": "mncs.std.sort.v1",
+      "path": "std/sort.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "e968d2293dd8af808c063ab790f2af890e19fc1d48e772835220c1d4db9696d7",
+      "imports": [],
+      "name": "mncs.std.store.v1",
+      "path": "std/store.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "169d17cb48d9c818f5e11eae79d9c74d8a2f3b5e477469762eb2ea3e0b0c6ce8",
+      "imports": [],
+      "name": "mncs.std.task.v1",
+      "path": "std/task.mncs",
+      "profile": "0.8"
+    },
+    {
+      "content_sha256": "e30c79a0316b0a7b723241d2a6385ccf5fdb65150e766c25079591d87234276d",
+      "imports": [
+        "mncs.std.text_view.v1"
+      ],
+      "name": "mncs.std.text_map.v1",
+      "path": "std/text_map.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "9d09428028957c4f1002bc86024e6c2b672ec895241484a3e0a46183f3f865a9",
+      "imports": [
+        "mncs.core.bytes.v1"
+      ],
+      "name": "mncs.std.text_scan.v1",
+      "path": "std/text_scan.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "471d10a104d9a3f8f60ff425965369d44d29fd36ea7b96762da9c82b8b4c9fe0",
+      "imports": [
+        "mncs.std.json_cursor.v1"
+      ],
+      "name": "mncs.std.text_utf8.v1",
+      "path": "std/text_utf8.mncs",
+      "profile": "0.13"
+    },
+    {
+      "content_sha256": "dec9ee39f224b0064a593bbdc536d798d20d5248c3cb8cca37ef33dd7dc3735f",
+      "imports": [],
+      "name": "mncs.std.text_view.v1",
+      "path": "std/text_view.mncs",
+      "profile": "0.10"
+    },
+    {
+      "content_sha256": "c4e12abaff46b259ee7cda9efae1beeed2d0c36d0e89be48189767fc20dc29d3",
+      "imports": [],
+      "name": "mncs.std.token_set.v1",
+      "path": "std/token_set.mncs",
+      "profile": "0.13"
+    }
+  ],
+  "repository": "mncs-stdlib",
+  "requires_profile": {
+    "max": "0.18",
+    "min": "0.5"
+  },
+  "schema_version": "mncs.stdlib-manifest/1",
+  "source_commit": "143b85f"
+}
