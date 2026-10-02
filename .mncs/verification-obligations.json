@@ -1,0 +1,81 @@
+{
+  "schema_version": "mncs-family.verification-obligation-inventory/v1",
+  "repository": "mncs-stdlib",
+  "revision": 1,
+  "obligations": [
+    {
+      "identity": "mncs-stdlib.manifest-freshness",
+      "title": "Manifest matches bundle pin and library tree",
+      "guarantee_domain": "stdlib_integrity",
+      "evidence_role": "freshness_oracle",
+      "lifecycle": "permanent",
+      "scope": "repository_canonical",
+      "subjects": [
+        "mncs:stdlib-bundle",
+        "mncs:stdlib-manifest"
+      ],
+      "invalidation_dependencies": [
+        "library/",
+        "dist/stdlib-bundle.json",
+        "stdlib-manifest.json",
+        "tools/gen_manifest.py"
+      ],
+      "executor": {
+        "provider": "mncs-stdlib",
+        "kind": "external_integration",
+        "entrypoint": "python3 tools/gen_manifest.py --root . --check",
+        "argv": ["python3", "tools/gen_manifest.py", "--root", ".", "--check"],
+        "working_directory": ".",
+        "timeout_seconds": 120,
+        "effects": ["verify"]
+      }
+    },
+    {
+      "identity": "mncs-stdlib.corpus-regen",
+      "title": "Committed corpora match deterministic generators",
+      "guarantee_domain": "stdlib_integrity",
+      "evidence_role": "freshness_oracle",
+      "lifecycle": "permanent",
+      "scope": "repository_canonical",
+      "subjects": [
+        "mncs:stdlib-corpora"
+      ],
+      "invalidation_dependencies": [
+        "scripts/",
+        "examples/execution/"
+      ],
+      "executor": {
+        "provider": "mncs-stdlib",
+        "kind": "external_integration",
+        "entrypoint": "python3 -m pytest tests/test_regen.py -q",
+        "argv": ["python3", "-m", "pytest", "tests/test_regen.py", "-q"],
+        "working_directory": ".",
+        "timeout_seconds": 300,
+        "effects": ["verify"]
+      }
+    },
+    {
+      "identity": "mncs-stdlib.module-integrity",
+      "title": "Every module declares identity, profile, and layering",
+      "guarantee_domain": "stdlib_integrity",
+      "evidence_role": "structural_oracle",
+      "lifecycle": "permanent",
+      "scope": "repository_canonical",
+      "subjects": [
+        "mncs:stdlib-modules"
+      ],
+      "invalidation_dependencies": [
+        "library/"
+      ],
+      "executor": {
+        "provider": "mncs-stdlib",
+        "kind": "external_integration",
+        "entrypoint": "python3 -m pytest tests/test_modules.py tests/test_manifest.py -q",
+        "argv": ["python3", "-m", "pytest", "tests/test_modules.py", "tests/test_manifest.py", "-q"],
+        "working_directory": ".",
+        "timeout_seconds": 300,
+        "effects": ["verify"]
+      }
+    }
+  ]
+}

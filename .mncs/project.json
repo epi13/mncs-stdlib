@@ -1,0 +1,80 @@
+{
+  "schema_version": "mncs-family.repository-manifest/v0alpha1",
+  "repository": "mncs-stdlib",
+  "revision": 1,
+  "manifest_location": "in-repository",
+  "authority": {
+    "note": "Stdlib owns reusable MNCS facilities, their executable contracts, the bundle pin, and the compatibility manifest. It does not own language semantics, compilation, execution, or environment composition."
+  },
+  "verification": {
+    "schema_version": "mncs-family.verification-obligation-inventory/v1",
+    "obligation_inventory": ".mncs/verification-obligations.json",
+    "test_runner_identity": "mncs-stdlib-integrity/0.1"
+  },
+  "contracts": {
+    "provides": [
+      {
+        "contract": "stdlib-source",
+        "version": "1",
+        "kind": "library-source",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "library/",
+          "stdlib-manifest.json"
+        ]
+      },
+      {
+        "contract": "stdlib-bundle",
+        "version": "1",
+        "kind": "library-distribution",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "dist/stdlib-bundle.json",
+          "stdlib-manifest.json"
+        ]
+      },
+      {
+        "contract": "stdlib-manifest",
+        "version": "1",
+        "kind": "compatibility-contract",
+        "stability": "experimental",
+        "fingerprint_sources": [
+          "stdlib-manifest.json",
+          "tools/gen_manifest.py",
+          "tools/stdlib_info.py"
+        ]
+      }
+    ],
+    "consumes": [
+      {
+        "contract": "mncs-language.compiler",
+        "envelope": {
+          "op": "any"
+        },
+        "required": true,
+        "evidence_refs": [
+          "tools/regen.sh",
+          "tests/test_toolchain.py"
+        ]
+      }
+    ],
+    "tests": [
+      {
+        "test": "stdlib-integrity",
+        "command": {
+          "argv": ["python3", "-m", "pytest", "tests/", "-k", "not toolchain", "-q"],
+          "timeout_seconds": 300
+        },
+        "covers": ["manifest", "bundle", "modules", "regen"]
+      },
+      {
+        "test": "stdlib-toolchain",
+        "command": {
+          "argv": ["python3", "-m", "pytest", "tests/", "-q"],
+          "timeout_seconds": 1200
+        },
+        "covers": ["module-compilation", "consumer-resolution", "compatibility"]
+      }
+    ]
+  }
+}

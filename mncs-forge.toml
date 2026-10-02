@@ -1,0 +1,66 @@
+version = 1
+environment_allowlist = ["PATH", "LANG", "LC_ALL", "PYTHONPATH", "MNCS_BIN", "MNCS_STDLIB_ROOT"]
+
+[project]
+name = "MNCS standard library"
+identity = "mncs-stdlib-v1"
+root = "."
+
+[paths]
+candidates = []
+generated = ["dist/stdlib-bundle.json", "stdlib-manifest.json"]
+contracts = ["ARCHITECTURE.md", "CONTRIBUTING.md", "stdlib-manifest.json"]
+references = ["library", "examples", "scripts", "tools", "tests", "docs", "rfcs", "pressures", "README.md", ".mncs/project.json", "family-semantic-contracts-v1.json"]
+evaluators = []
+acceptance_policies = []
+development_evidence = ["build/forge-evidence"]
+protected = []
+outputs = ["build/forge-evidence"]
+
+[limits]
+timeout_seconds = 600
+output_bytes = 1048576
+
+[authority.development]
+may_write_candidates = false
+may_write_generated = false
+may_run_providers = true
+
+[authority.evaluator]
+candidate_read_only = true
+authority_read_only = true
+require_frozen_identities = true
+withhold_repair_feedback = true
+
+[policies]
+selection = "README.md"
+useful_benefit_objective = "ARCHITECTURE.md"
+
+[[providers]]
+id = "mncs-stdlib-local"
+name = "MNCS stdlib local validation"
+identity = "mncs-stdlib-local-v1"
+version = "0.1"
+command = ["python3", "tools/stdlib_info.py", "manifest"]
+transport = "stdio-jsonl"
+required = true
+capabilities = ["inspection"]
+supported_constructs = ["stdlib-manifest", "stdlib-modules", "stdlib-corpora"]
+unsupported_constructs = []
+limitations = ["operator-controlled local development evidence"]
+
+[[workflows]]
+name = "stdlib-integrity"
+category = "inspection"
+mode = "development"
+command = ["python3", "-m", "pytest", "tests/", "-k", "not toolchain", "-q"]
+disclosure = "compact"
+subject = "project"
+
+[[workflows]]
+name = "stdlib-toolchain"
+category = "inspection"
+mode = "development"
+command = ["python3", "-m", "pytest", "tests/", "-q"]
+disclosure = "compact"
+subject = "project"
