@@ -1,0 +1,46 @@
+{
+  "schema_version": "commons.mncs.semantic-contract-declarations/v1",
+  "repository_id": "mncs-stdlib",
+  "revision": "1",
+  "provides": [
+    {
+      "contract_identity": "mncs.stdlib-manifest/1",
+      "contract_revision": "1",
+      "exported_identity": "mncs-stdlib:stdlib-manifest",
+      "evidence": "stdlib-manifest.json",
+      "canonical_entrypoint": "stdlib-manifest",
+      "status": "native_canonical",
+      "invocation": {
+        "kind": "python",
+        "path": "tools/stdlib_info.py",
+        "adapter_library_paths": ["library"]
+      },
+      "effects": ["read"]
+    },
+    {
+      "contract_identity": "mncs.stdlib-bundle/1",
+      "contract_revision": "1",
+      "exported_identity": "mncs-stdlib:stdlib-bundle",
+      "evidence": "dist/stdlib-bundle.json",
+      "canonical_entrypoint": "stdlib-bundle",
+      "status": "native_canonical",
+      "invocation": {
+        "kind": "python",
+        "path": "tools/stdlib_info.py",
+        "fixed_argv": ["manifest"],
+        "adapter_library_paths": ["library"]
+      },
+      "effects": ["read"]
+    }
+  ],
+  "consumes": [
+    {
+      "contract_identity": "mncs.cli-toolchain/1",
+      "contract_revision": "1",
+      "consumer_identity": "mncs-stdlib:cli-toolchain",
+      "evidence": "tools/regen.sh",
+      "canonical_entrypoint": "mncs bundle",
+      "status": "native_canonical"
+    }
+  ]
+}
