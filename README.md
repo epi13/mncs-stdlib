@@ -1,6 +1,21 @@
 # mncs-stdlib
 
 <!-- MNCS:generated:begin -->
+## Project entry
+
+The canonical MNCS standard library: normal reusable MNCS facilities, written in MNCS itself, distributed as content-addressed modules, and consumed by ordinary MNCS programs through the toolchain's module resolution — no vendoring, no host-language fallbacks, no repository layout knowledge required.
+
+```bash
+python3 -m pytest tests/ -k 'not toolchain' -q
+```
+
+Declared capabilities (declarations do not establish execution health):
+
+- `stdlib-bundle/1` — library-distribution (experimental)
+- `stdlib-manifest/1` — compatibility-contract (experimental)
+- `stdlib-source/1` — library-source (experimental)
+
+Semantic sources and ownership: `.mncs/projections.json`.
 <!-- MNCS:generated:end -->
 
 The canonical MNCS standard library: normal reusable MNCS facilities,

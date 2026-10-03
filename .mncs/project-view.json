@@ -1,0 +1,56 @@
+{
+  "capabilities": [
+    {
+      "contract": "stdlib-source",
+      "fingerprint_sources": [
+        "library/",
+        "stdlib-manifest.json"
+      ],
+      "kind": "library-source",
+      "stability": "experimental",
+      "version": "1"
+    },
+    {
+      "contract": "stdlib-bundle",
+      "fingerprint_sources": [
+        "dist/stdlib-bundle.json",
+        "stdlib-manifest.json"
+      ],
+      "kind": "library-distribution",
+      "stability": "experimental",
+      "version": "1"
+    },
+    {
+      "contract": "stdlib-manifest",
+      "fingerprint_sources": [
+        "stdlib-manifest.json",
+        "tools/gen_manifest.py",
+        "tools/stdlib_info.py"
+      ],
+      "kind": "compatibility-contract",
+      "stability": "experimental",
+      "version": "1"
+    }
+  ],
+  "dependencies": [
+    {
+      "contract": "mncs-language.compiler",
+      "envelope": {
+        "op": "any"
+      },
+      "evidence_refs": [
+        "tools/regen.sh",
+        "tests/test_toolchain.py"
+      ],
+      "required": true
+    }
+  ],
+  "entry": [
+    "python3 -m pytest tests/ -k 'not toolchain' -q"
+  ],
+  "purpose": "The canonical MNCS standard library: normal reusable MNCS facilities, written in MNCS itself, distributed as content-addressed modules, and consumed by ordinary MNCS programs through the toolchain's module resolution — no vendoring, no host-language fallbacks, no repository layout knowledge required.",
+  "repository": "mncs-stdlib",
+  "schema_version": "mncs.project-view/1",
+  "source_identity": "sha256:21c93803a154b9ce32a6a0a42d08514d2a8b50be8920ca96c64087a82663e658",
+  "structure": {}
+}
