@@ -1,5 +1,8 @@
 # mncs-stdlib
 
+<!-- MNCS:generated:begin -->
+<!-- MNCS:generated:end -->
+
 The canonical MNCS standard library: normal reusable MNCS facilities,
 written in MNCS itself, distributed as content-addressed modules, and
 consumed by ordinary MNCS programs through the toolchain's module

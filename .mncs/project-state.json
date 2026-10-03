@@ -1,0 +1,17 @@
+{
+  "schema_version": "mncs.project-intent/1",
+  "purpose": "The canonical MNCS standard library: normal reusable MNCS facilities, written in MNCS itself, distributed as content-addressed modules, and consumed by ordinary MNCS programs through the toolchain's module resolution \u2014 no vendoring, no host-language fallbacks, no repository layout knowledge required.",
+  "entry": [
+    "python3 -m pytest tests/ -k 'not toolchain' -q"
+  ],
+  "milestones": [
+    {
+      "id": "mncs-stdlib:projection-conformance",
+      "title": "Declared ambient projection surfaces satisfy their contract",
+      "subject_slot": "declarations",
+      "evidence": "projection-conformance",
+      "dependencies": [],
+      "blockers": []
+    }
+  ]
+}
