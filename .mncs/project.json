@@ -65,7 +65,8 @@
           "argv": ["python3", "-m", "pytest", "tests/", "-k", "not toolchain", "-q"],
           "timeout_seconds": 300
         },
-        "covers": ["manifest", "bundle", "modules", "regen"]
+        "covers": ["manifest", "bundle", "modules", "regen"],
+        "obligation": "self"
       },
       {
         "test": "stdlib-toolchain",
@@ -73,7 +74,8 @@
           "argv": ["python3", "-m", "pytest", "tests/", "-q"],
           "timeout_seconds": 1200
         },
-        "covers": ["module-compilation", "consumer-resolution", "compatibility"]
+        "covers": ["module-compilation", "consumer-resolution", "compatibility"],
+        "obligation": "self"
       }
     ]
   },
