@@ -51,9 +51,10 @@ Rules:
    (`SUPPORTED`/`UNSUPPORTED`/`UNKNOWN`) come from corpus execution,
    recorded per run — never from this manifest.
 
-Doctor (`mncs-doctor` check `stdlib-health`) and the environment
-composition read this manifest; they never guess from paths or
-branches.
+Doctor (findings folded into the `toolchain-health` check; a dedicated
+`stdlib-health` id waits on `mncs-doctor` pressure DOC-P-023) and the
+environment composition read this manifest; they never guess from paths
+or branches.
 
 ## Profile discipline for contributors
 
