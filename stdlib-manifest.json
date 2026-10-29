@@ -1,5 +1,5 @@
 {
-  "bundle_identity": "mncs:stdlib-bundle:74e6615020da776a4dbc65dc9f0b1a6382f60311aab3e3a19a079d925ecc180c",
+  "bundle_identity": "mncs:stdlib-bundle:0415cff2b1c0ef97370ef5916fc612dd559424be7d89aeac55e336ecb561dbf1",
   "bundle_path": "dist/stdlib-bundle.json",
   "library_path": "library",
   "module_count": 61,
@@ -409,7 +409,7 @@
       "profile": "0.13"
     },
     {
-      "content_sha256": "9065c75f7b3e3ea81f4786ff587b0e47da1eed82b70fe9d166340b695fffff6c",
+      "content_sha256": "d6e72aaf07234e4c83324b6055c9457804d9799c02fba5c8789c8bc54367cfbd",
       "imports": [
         "mncs.std.encoding.v1"
       ],
@@ -493,5 +493,5 @@
     "min": "0.5"
   },
   "schema_version": "mncs.stdlib-manifest/1",
-  "source_commit": "797b113"
+  "source_commit": "6aa443c"
 }

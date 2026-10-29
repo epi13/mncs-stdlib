@@ -8,6 +8,7 @@ constants, so the corpus does not merely parrot an implementation. The
 expected digests are NIST/SHA-256 oracles from hashlib:
 
 - "abc" (single block through init/update/finalize);
+- "abc" using the MNCS-owned standard round constants;
 - a fixed synthetic 156-byte blob in a 64+64+28 chunking;
 - the same bytes in a 30+63+63 chunking (chunking independence: the
   same expected digest under a different split).
@@ -120,6 +121,9 @@ def main():
     cases = [
         case("sha256-abc", "candidate_sha256_abc",
              [byte_seq(b"abc"), u64(3), k_arg()],
+             digest_bytes(b"abc")),
+        case("sha256-abc-standard-constants", "candidate_sha256_abc_standard",
+             [byte_seq(b"abc"), u64(3)],
              digest_bytes(b"abc")),
         blocks_call("sha256-blocks-64-64-28", [64, 64, 28]),
         blocks_call("sha256-blocks-30-63-63", [30, 63, 63]),
