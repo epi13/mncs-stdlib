@@ -1,6 +1,6 @@
 # MNCS standard library — module catalog
 
-This tree is the library itself: 61 MNCS modules, semantically
+This tree is the library itself: 62 MNCS modules, semantically
 authoritative at the MNCS level. Consumers bind to these modules by
 identity and bounded agreement, never by re-implementing the same
 helpers ad hoc.
@@ -62,6 +62,7 @@ form of this table.
 | `core/version.mncs` | `mncs.core.version.v1` | 0.6 | mncs.core.version — canonical version identities and compatibility envelopes. |
 | `core/vision.mncs` | `mncs.core.vision.v1` | 0.13 | mncs.core.vision — MNCS-native visual observer: pixels to scene graphs. |
 | `std/ansi.mncs` | `mncs.std.ansi.v1` | 0.8 | mncs.std.ansi.v1 — bounded ANSI/VT semantic parsing. |
+| `std/budget.mncs` | `mncs.std.budget.v1` | 0.6 | Total cumulative resource admission with overflow-safe repeated charges. |
 | `std/application.mncs` | `mncs.std.application.v1` | 0.16 | mncs.std.application — the reusable typed application-entry contract. |
 | `std/channel.mncs` | `mncs.std.channel.v1` | 0.13 | mncs.std.channel — deterministic bounded-channel contracts. |
 | `std/chunk.mncs` | `mncs.std.chunk.v1` | 0.13 | mncs.std.chunk — bounded chunk cursors with cross-chunk span identities. |

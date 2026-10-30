@@ -1,0 +1,56 @@
+mncs 0.6;
+
+// mncs.std.budget — total cumulative resource admission without overflow.
+// Consumers supply the limit and charges; this module owns arithmetic only.
+// Rejection is absorbing, including for a malformed externally built state.
+// A failed reservation retains earlier usage. No charge can wrap into an
+// apparent admission, even when the limit is the maximum u64 value.
+module mncs.std.budget.v1;
+
+record Budget { limit: u64, used: u64, exceeded: bool }
+
+fn start(limit: u64) -> (result: Budget) {
+    return Budget { limit: limit, used: 0, exceeded: false };
+}
+
+fn remaining(state: Budget) -> (result: u64) {
+    if state.exceeded || state.used > state.limit {
+        return 0;
+    }
+    return state.limit - state.used;
+}
+
+fn reject(state: Budget) -> (result: Budget) {
+    if state.used > state.limit {
+        return Budget { limit: state.limit, used: state.limit, exceeded: true };
+    }
+    return Budget {
+        limit: state.limit,
+        used: state.used,
+        exceeded: true
+    };
+}
+
+fn reserve(state: Budget, amount: u64) -> (result: Budget) {
+    if state.exceeded || state.used > state.limit {
+        return reject(state);
+    }
+    if amount > remaining(state) {
+        return reject(state);
+    }
+    return Budget { limit: state.limit, used: state.used + amount, exceeded: false };
+}
+
+// Reserve count equal charges without overflowing an intermediate product.
+fn reserve_product(state: Budget, count: u64, amount: u64) -> (result: Budget) {
+    if state.exceeded || state.used > state.limit {
+        return reject(state);
+    }
+    if amount == 0 {
+        return state;
+    }
+    if count > remaining(state) / amount {
+        return reject(state);
+    }
+    return reserve(state, count * amount);
+}

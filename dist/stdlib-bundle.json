@@ -1,8 +1,8 @@
 {
   "schema_version": "mncs.stdlib-bundle/1",
-  "bundle_identity": "mncs:stdlib-bundle:0415cff2b1c0ef97370ef5916fc612dd559424be7d89aeac55e336ecb561dbf1",
+  "bundle_identity": "mncs:stdlib-bundle:4cf3cfd5ac40b93fc45381e6e8dddea682a6b52d58a874b70faef54344cf5c50",
   "generator": "mncs bundle generate",
-  "source_commit": "6aa443c",
+  "source_commit": "f086e5b",
   "modules": [
     {
       "name": "mncs.core.bounds.v1",
@@ -255,6 +255,13 @@
       "profile": "0.16",
       "content_sha256": "5669f67e921e71c0f54742325f06fddfe3b11692c1fe3d27ee515f8a3fd30c7e",
       "text": "mncs 0.16;\n\n// mncs.std.application — the reusable typed application-entry contract.\n//\n// A generic launcher may supply this record as the first argument to an\n// application entry function. The launcher owns only boundary acquisition and\n// serialization; application policy remains in the caller's .mncs module.\n// There is no ambient process environment, stream handle, or exit mutation:\n// argv, bounded environment, current directory, stdin, and the requested exit\n// projection are ordinary typed values.\nmodule mncs.std.application.v1;\n\nrecord EnvironmentEntry {\n    key: [byte; up_to 64],\n    value: [byte; up_to 1024]\n}\n\n// Launch-vector capacity agrees with mncs.std.process.v1: 256 entries.\n// See the ProcessRequest contract note for the rationale.\nrecord ApplicationContext {\n    application_identity: [byte; 32],\n    argv: [[byte; up_to 1024]; up_to 256],\n    argv_count: u64,\n    environment: [EnvironmentEntry; up_to 256],\n    environment_count: u64,\n    current_dir: [byte; up_to 1024],\n    stdin: [byte; up_to 1024]\n}\n\nrecord ApplicationExit {\n    stdout: [byte; up_to 1024],\n    stderr: [byte; up_to 1024],\n    exit_code: i64\n}\n\nfn context_is_bounded(context: ApplicationContext) -> (result: bool) {\n    return context.argv_count == context.argv.len\n        && context.environment_count == context.environment.len;\n}\n\nfn success(stdout: [byte; up_to 1024]) -> (result: ApplicationExit) {\n    return ApplicationExit {\n        stdout: stdout,\n        stderr: [],\n        exit_code: 0\n    };\n}\n\nfn failure(stderr: [byte; up_to 1024], exit_code: i64) -> (result: ApplicationExit) {\n    return ApplicationExit {\n        stdout: [],\n        stderr: stderr,\n        exit_code: exit_code\n    };\n}\n"
+    },
+    {
+      "name": "mncs.std.budget.v1",
+      "path": "std/budget.mncs",
+      "profile": "0.6",
+      "content_sha256": "f27ed2e375700e54dea60c7e5805f0db89d5bb7d6851804acac168b943b9f497",
+      "text": "mncs 0.6;\n\n// mncs.std.budget — total cumulative resource admission without overflow.\n// Consumers supply the limit and charges; this module owns arithmetic only.\n// Rejection is absorbing, including for a malformed externally built state.\n// A failed reservation retains earlier usage. No charge can wrap into an\n// apparent admission, even when the limit is the maximum u64 value.\nmodule mncs.std.budget.v1;\n\nrecord Budget { limit: u64, used: u64, exceeded: bool }\n\nfn start(limit: u64) -> (result: Budget) {\n    return Budget { limit: limit, used: 0, exceeded: false };\n}\n\nfn remaining(state: Budget) -> (result: u64) {\n    if state.exceeded || state.used > state.limit {\n        return 0;\n    }\n    return state.limit - state.used;\n}\n\nfn reject(state: Budget) -> (result: Budget) {\n    if state.used > state.limit {\n        return Budget { limit: state.limit, used: state.limit, exceeded: true };\n    }\n    return Budget {\n        limit: state.limit,\n        used: state.used,\n        exceeded: true\n    };\n}\n\nfn reserve(state: Budget, amount: u64) -> (result: Budget) {\n    if state.exceeded || state.used > state.limit {\n        return reject(state);\n    }\n    if amount > remaining(state) {\n        return reject(state);\n    }\n    return Budget { limit: state.limit, used: state.used + amount, exceeded: false };\n}\n\n// Reserve count equal charges without overflowing an intermediate product.\nfn reserve_product(state: Budget, count: u64, amount: u64) -> (result: Budget) {\n    if state.exceeded || state.used > state.limit {\n        return reject(state);\n    }\n    if amount == 0 {\n        return state;\n    }\n    if count > remaining(state) / amount {\n        return reject(state);\n    }\n    return reserve(state, count * amount);\n}\n"
     },
     {
       "name": "mncs.std.channel.v1",

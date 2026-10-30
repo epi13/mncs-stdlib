@@ -13,6 +13,20 @@ import pytest
 pytestmark = pytest.mark.toolchain
 
 
+def test_budget_contract_executes_on_cranelift(root, library_root, mncs_bin, tmp_path):
+    result = run_mncs(mncs_bin, [
+        "experiment", "run", os.path.join(root, "examples/source/budget-consumer.mncs"),
+        "--backend", "cranelift", "--corpus", os.path.join(root, "examples/execution/budget-corpus.json"),
+        "--output-dir", str(tmp_path / "budget"),
+    ], library_root)
+    assert result.returncode == 0, result.stderr
+    with open(tmp_path / "budget/result.json", encoding="utf-8") as handle:
+        report = json.load(handle)
+    assert len(report["cases"]) == 34
+    assert all(case["status"] == "returned" and case["expectation_met"] is True
+               for case in report["cases"])
+
+
 def run_mncs(mncs_bin, args, library_root, extra_env=None):
     env = dict(os.environ)
     env["MNCS_LIBRARY_PATH"] = library_root

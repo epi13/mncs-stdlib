@@ -13,6 +13,7 @@ import tempfile
 
 # Generators that write into examples/execution/ on their own.
 OUT_GENERATORS = [
+    "scripts/gen_budget_corpus.py",
     "scripts/gen-library-core-corpora.py",
     "scripts/gen-family-coherence-corpora.py",
     "scripts/gen_collection_corpora.py",

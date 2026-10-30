@@ -1,0 +1,29 @@
+{
+  "schema_version": "mncs.development-evidence/1",
+  "session_id": "ses_dce10b868598005a",
+  "capability": "mncs.std.budget.v1",
+  "responsibility": "Overflow-safe cumulative admission, including repeated charges and absorbing rejection. Consumers own limits and cost models.",
+  "source_profile": "0.6",
+  "verification": {
+    "integrity_and_toolchain": "24 passed, 1 pre-existing skip",
+    "independent_integer_model_cases": 34,
+    "canonical_vm_all_expected_values_match": true,
+    "canonical_vm_producer_identity": "sha256:b923ff6342097105c06d4c59143a009ec6272bec7ae1e8fbe16a8f8ce849e996",
+    "canonical_vm_product_reused": true,
+    "cranelift_all_expected_values_match": true,
+    "cranelift_experiment_identity": "mncs:language:experiment:result:ce9fa6ce9a6fd49949dc9c95845fded899ae54fecae4f0d7e48ddd8d03345991",
+    "cranelift_formal_status": "UNKNOWN",
+    "cranelift_unresolved_reasons": [
+      "compilation retained required unresolved obligations"
+    ]
+  },
+  "consumer": {
+    "repository": "mncs-test",
+    "module": "mncs.test.verification_selection_v1",
+    "responsibility": "Native conservative comparison-work preflight; Python byte measurements and process transport remain."
+  },
+  "limits": [
+    "Bounded execution agreement is not universal equivalence or discharged compiler proof.",
+    "Stdlib supplies arithmetic, not Test selection policy."
+  ]
+}

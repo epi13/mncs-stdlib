@@ -1,0 +1,19 @@
+{
+  "name": "mncs-stdlib-local-development",
+  "working_checkout": "current",
+  "workspace_scope": {
+    "kind": "workspace",
+    "repositories": [
+      "mncs-stdlib"
+    ]
+  },
+  "intent": {
+    "goal": "Develop reusable MNCS library capabilities with executable consumer contracts.",
+    "repositories": [
+      "mncs-stdlib"
+    ],
+    "constraints": [
+      "Preserve foreign work; regenerate bundle and manifest with every library change."
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+mncs 0.13;
+module examples.budget_consumer;
+use mncs.std.budget.v1;
+
+fn scenario(limit: u64, first: u64, count: u64, unit: u64, last: u64) -> (result: Budget) {
+    let initial: Budget = reserve(start(limit), first);
+    let repeated: Budget = reserve_product(initial, count, unit);
+    return reserve(repeated, last);
+}
+
+fn used(limit: u64, first: u64, count: u64, unit: u64, last: u64) -> (result: u64) {
+    return scenario(limit, first, count, unit, last).used;
+}
+
+fn admitted(limit: u64, first: u64, count: u64, unit: u64, last: u64) -> (result: bool) {
+    return !scenario(limit, first, count, unit, last).exceeded;
+}
+
+fn available(limit: u64, first: u64, count: u64, unit: u64, last: u64) -> (result: u64) {
+    return remaining(scenario(limit, first, count, unit, last));
+}
+
+fn malformed_admitted(limit: u64, used: u64) -> (result: bool) {
+    let state: Budget = Budget { limit: limit, used: used, exceeded: false };
+    return !reserve_product(state, 0, 0).exceeded;
+}
