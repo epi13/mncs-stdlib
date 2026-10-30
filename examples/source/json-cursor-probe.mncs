@@ -1,19 +1,125 @@
 mncs 0.10;
 module examples.json_cursor_probe;
 
-use mncs.std.json_cursor.v1;
+use mncs.std.json_cursor.v1 as cursor;
+use mncs.std.json.v1 as json;
+
+record TokenFold {
+    cursor: cursor.Cursor,
+    count: u64,
+    digest: u64,
+    kind_sum: u64,
+    start_sum: u64,
+    end_sum: u64,
+    depth_sum: u64
+}
 
 fn inspect(input: [byte; up_to 64]) -> (result: i64) {
-    let state: Cursor = feed_chunk(init(), input);
+    let state: cursor.Cursor = cursor.feed_chunk(cursor.init(), input);
     return state.position as i64 + (state.valid as i64) * 1000;
 }
 
 fn key_length(input: [byte; up_to 64]) -> (result: i64) {
-    let state: Cursor = feed_chunk(init(), input);
+    let state: cursor.Cursor = cursor.feed_chunk(cursor.init(), input);
     return state.key_length as i64;
 }
 
 fn complete(input: [byte; up_to 64]) -> (result: i64) {
-    let state: Cursor = feed_chunk(init(), input);
-    return (is_valid(state) as i64);
+    let state: cursor.Cursor = cursor.feed_chunk(cursor.init(), input);
+    return (cursor.is_valid(state) as i64);
+}
+
+fn mix_token(digest: u64, kind: byte, start: u64, end: u64, depth: byte) -> (result: u64) {
+    let word: u64 = (kind as u64) *% 100000 +% start *% 1000 +% end *% 10 +% (depth as u64);
+    return (digest *% 31 +% word) % 1000003;
+}
+
+fn token_step(state: TokenFold, value: byte) -> (result: TokenFold) {
+    let current: cursor.Cursor = cursor.feed_byte(state.cursor, value);
+    let has_token: bool = current.token_event;
+    let count: u64 = state.count + (has_token as u64);
+    let token_digest: u64 = select(
+        has_token,
+        mix_token(state.digest, current.token_kind, current.token_start, current.token_end, current.token_depth),
+        state.digest
+    );
+    let matching_close: bool = (current.event == 7 && current.token_kind == 9)
+        || (current.event == 8 && current.token_kind == 10);
+    let extra_close: bool = (current.event == 7 || current.event == 8)
+        && select(has_token && matching_close, false, true);
+    let closed_kind: byte = select(current.event == 7, 9, 10);
+    let final_digest: u64 = select(
+        extra_close,
+        mix_token(token_digest, closed_kind, current.position - 1, current.position, current.depth),
+        token_digest
+    );
+    let kind_sum: u64 = state.kind_sum
+        + select(has_token, current.token_kind as u64, 0)
+        + select(extra_close, closed_kind as u64, 0);
+    let start_sum: u64 = state.start_sum
+        + select(has_token, current.token_start, 0)
+        + select(extra_close, current.position - 1, 0);
+    let end_sum: u64 = state.end_sum
+        + select(has_token, current.token_end, 0)
+        + select(extra_close, current.position, 0);
+    let depth_sum: u64 = state.depth_sum
+        + select(has_token, current.token_depth as u64, 0)
+        + select(extra_close, current.depth as u64, 0);
+    return TokenFold {
+        cursor: current,
+        count: count + (extra_close as u64),
+        digest: final_digest,
+        kind_sum: kind_sum,
+        start_sum: start_sum,
+        end_sum: end_sum,
+        depth_sum: depth_sum
+    };
+}
+
+fn token_fingerprint(input: [byte; up_to 64]) -> (result: i64) {
+    let validation: json.ScanState = json.feed_chunk(json.init(), input);
+    if select(json.is_valid(validation), false, true) { return 0 - 1; }
+    let start: TokenFold = TokenFold {
+        cursor: cursor.init(), count: 0, digest: 0,
+        kind_sum: 0, start_sum: 0, end_sum: 0, depth_sum: 0
+    };
+    iterate i over input carrying state: TokenFold = start {
+        next state = token_step(state, input[i]);
+    }
+    let completed: cursor.Cursor = cursor.finish(state.cursor);
+    let final_count: u64 = state.count + (completed.token_event as u64);
+    let final_digest: u64 = select(
+        completed.token_event,
+        mix_token(state.digest, completed.token_kind, completed.token_start, completed.token_end, completed.token_depth),
+        state.digest
+    );
+    if select(cursor.is_valid(completed), false, true) { return 0 - 1; }
+    return (final_count *% 1000003 +% final_digest) as i64;
+}
+
+fn token_components(input: [byte; up_to 64]) -> (result: i64) {
+    let start: TokenFold = TokenFold {
+        cursor: cursor.init(), count: 0, digest: 0,
+        kind_sum: 0, start_sum: 0, end_sum: 0, depth_sum: 0
+    };
+    iterate i over input carrying state: TokenFold = start {
+        next state = token_step(state, input[i]);
+    }
+    let completed: cursor.Cursor = cursor.finish(state.cursor);
+    let count: u64 = state.count + (completed.token_event as u64);
+    let kind_sum: u64 = state.kind_sum + select(completed.token_event, completed.token_kind as u64, 0);
+    let start_sum: u64 = state.start_sum + select(completed.token_event, completed.token_start, 0);
+    let end_sum: u64 = state.end_sum + select(completed.token_event, completed.token_end, 0);
+    let depth_sum: u64 = state.depth_sum + select(completed.token_event, completed.token_depth as u64, 0);
+    let packed: u64 = count *% 1000000000000 +% kind_sum *% 1000000000
+        +% start_sum *% 1000000 +% end_sum *% 1000 +% depth_sum;
+    return packed as i64;
+}
+
+fn split_validity(first: [byte; up_to 64], second: [byte; up_to 64]) -> (result: i64) {
+    let scanner_first: json.ScanState = json.feed_chunk(json.init(), first);
+    let scanner_final: json.ScanState = json.feed_chunk(scanner_first, second);
+    let cursor_first: cursor.Cursor = cursor.feed_chunk(cursor.init(), first);
+    let cursor_final: cursor.Cursor = cursor.feed_chunk(cursor_first, second);
+    return (json.is_valid(scanner_final) as i64) * 2 + (cursor.is_valid(cursor_final) as i64);
 }

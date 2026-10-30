@@ -4,7 +4,7 @@ mncs 0.13;
 //
 // The scanner is allocation-free and operates on a byte view. It recognizes
 // objects, arrays, strings, JSON numbers, true/false/null, whitespace,
-// separators, bounded nesting, control-byte rejection, and JSON escapes. Its
+// separators, up to 63 nested containers, control-byte rejection, and JSON escapes. Its
 // scalar result is deliberately stable for cross-backend experiments:
 //   positive  — one complete value; 1_000_000 + objects*1_000 + arrays*10 + strings
 //   -1        — bounded input ended before a value was complete
@@ -15,7 +15,10 @@ mncs 0.13;
 module mncs.std.json.v1;
 
 record ScanState {
-    stack: u64,
+    // One bounded frame per open container. Each frame stores the container
+    // kind and the parent's expectation; 63 levels match the public-result
+    // adapter's historical input bound without packing lossy state into u64.
+    stack: [byte; 64],
     depth: u64,
     expect: byte,
     mode: byte,
@@ -41,14 +44,18 @@ fn is_hex(value: byte) -> (result: bool) {
     return (n >= 48 && n <= 57) || (n >= 65 && n <= 70) || (n >= 97 && n <= 102);
 }
 
+fn zero_stack() -> (result: [byte; 64]) {
+    return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+}
+
 fn after_value(expect: byte) -> (result: byte) {
     if expect == 0 { return 7; }
     if expect == 3 { return 4; }
     return 6;
 }
 
-// Five bits per bounded nesting level: two bits for the container kind and
-// three bits for the parent expectation. Twelve levels fit in one u64 word.
+// Retained for callers that used the earlier packed-stack helper. Active
+// ScanState frames are now stored as one byte per nesting level.
 fn stack_weight(depth: u64) -> (result: u64) {
     if depth == 0 { return 1; }
     if depth == 1 { return 32; }
@@ -73,11 +80,11 @@ fn scan_close_value(state: ScanState) -> (result: ScanState) {
 }
 
 fn scan_begin_container(state: ScanState, value: byte) -> (result: ScanState) {
-    if state.depth >= 12 { return scan_bad(state, 3); }
+    if state.depth >= 63 { return scan_bad(state, 3); }
     let kind: u64 = select(value == 123, 1, 2);
     let parent: u64 = after_value(state.expect) as u64;
     let entry: u64 = kind +% (parent *% 4);
-    let stack: u64 = state.stack +% (entry *% stack_weight(state.depth));
+    let stack: [byte; 64] = replace(state.stack, state.depth, entry as byte);
     let depth: u64 = state.depth + 1;
     let expect: byte = select(value == 123, 1, 5);
     let objects: u64 = state.objects + (value == 123) as u64;
@@ -87,14 +94,14 @@ fn scan_begin_container(state: ScanState, value: byte) -> (result: ScanState) {
 
 fn scan_end_container(state: ScanState, value: byte) -> (result: ScanState) {
     if state.depth == 0 { return scan_bad(state, 1); }
-    let entry: u64 = (state.stack / stack_weight(state.depth - 1)) % 32;
+    let entry: u64 = state.stack[state.depth - 1] as u64;
     let kind: byte = (entry % 4) as byte;
     let correct: bool = (value == 125 && kind == 1 && (state.expect == 1 || state.expect == 4))
         || (value == 93 && kind == 2 && (state.expect == 5 || state.expect == 6));
     if correct {
         return ScanState {
             ..state,
-            stack: state.stack - entry *% stack_weight(state.depth - 1),
+            stack: replace(state.stack, state.depth - 1, 0),
             depth: state.depth - 1,
             expect: (entry / 4) as byte,
             mode: 0
@@ -264,9 +271,9 @@ fn scan_finish_end(state: ScanState) -> (result: ScanState) {
     return state;
 }
 
-fn scan(input: [byte; up_to 64]) -> (result: i64) {
-    let start: ScanState = ScanState {
-        stack: 0,
+fn init() -> (result: ScanState) {
+    return ScanState {
+        stack: zero_stack(),
         depth: 0,
         expect: 0,
         mode: 0,
@@ -281,11 +288,31 @@ fn scan(input: [byte; up_to 64]) -> (result: i64) {
         arrays: 0,
         strings: 0
     };
+}
+
+fn feed_chunk(state: ScanState, input: [byte; up_to 64]) -> (result: ScanState) {
+    iterate i over input carrying current: ScanState = state {
+        next current = scan_step(current, input[i]);
+    }
+    return current;
+}
+
+fn finish(state: ScanState) -> (result: ScanState) {
+    return scan_finish_end(state);
+}
+
+fn is_valid(state: ScanState) -> (result: bool) {
+    let finished: ScanState = finish(state);
+    return finished.valid && finished.depth == 0 && finished.mode == 0 && finished.expect == 7;
+}
+
+fn scan(input: [byte; up_to 64]) -> (result: i64) {
+    let start: ScanState = init();
     iterate i over input carrying state: ScanState = start {
         next state = scan_step(state, input[i]);
     }
-    let finished: ScanState = scan_finish_end(state);
-    let complete: bool = finished.valid && finished.depth == 0 && finished.mode == 0 && finished.expect == 7;
+    let finished: ScanState = finish(state);
+    let complete: bool = is_valid(finished);
     if complete {
         return 1000000 +% (finished.objects as i64) *% 1000 +% (finished.arrays as i64) *% 10 +% (finished.strings as i64);
     }
