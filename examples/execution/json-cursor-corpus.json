@@ -1,7 +1,7 @@
 {
   "schema_version": "0.2",
   "name": "json-cursor",
-  "description": "Bounded JSON cursor validity, long-key saturation, and UTF-8 boundary witnesses.",
+  "description": "Bounded JSON validity, token spans, scalar-boundary events, long-key saturation, and UTF-8 boundary witnesses.",
   "cases": [
     {
       "id": "complete-object",
@@ -93,6 +93,705 @@
       "id": "reject-lone-low-surrogate",
       "request": { "schema_version": "0.1", "target": { "module": "examples.json_cursor_probe", "function": "complete" }, "arguments": [{ "sequence": { "values": [{ "byte": { "value": 123 } }, { "byte": { "value": 34 } }, { "byte": { "value": 97 } }, { "byte": { "value": 34 } }, { "byte": { "value": 58 } }, { "byte": { "value": 34 } }, { "byte": { "value": 92 } }, { "byte": { "value": 117 } }, { "byte": { "value": 68 } }, { "byte": { "value": 68 } }, { "byte": { "value": 49 } }, { "byte": { "value": 69 } }, { "byte": { "value": 34 } }, { "byte": { "value": 125 } }] } }], "step_budget": 100000, "policy": { "effects": "unsupported" } },
       "expected": [{ "integer": { "value": 0, "type": { "bits": 64, "signed": true } } }], "expected_status": "returned"
-    }
+    },
+    {
+      "id": "token-spans-and-depths",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "examples.json_cursor_probe",
+          "function": "token_fingerprint"
+        },
+        "arguments": [
+          {
+            "sequence": {
+              "values": [
+                {
+                  "byte": {
+                    "value": 123
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 34
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 97
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 34
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 58
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 91
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 116
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 114
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 117
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 101
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 44
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 45
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 50
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 44
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 49
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 46
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 53
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 44
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 110
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 117
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 108
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 108
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 44
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 34
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 195
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 169
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 34
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 93
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 125
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "step_budget": 500000,
+        "policy": {
+          "effects": "unsupported"
+        }
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 10334629,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ],
+      "expected_status": "returned"
+    },
+    {
+      "id": "number-ending-at-container-close",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "examples.json_cursor_probe",
+          "function": "token_fingerprint"
+        },
+        "arguments": [
+          {
+            "sequence": {
+              "values": [
+                {
+                  "byte": {
+                    "value": 123
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 34
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 110
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 34
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 58
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 49
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 125
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "step_budget": 500000,
+        "policy": {
+          "effects": "unsupported"
+        }
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 4398401,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ],
+      "expected_status": "returned"
+    },
+    {
+      "id": "root-number-closed-at-end-of-stream",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "examples.json_cursor_probe",
+          "function": "token_fingerprint"
+        },
+        "arguments": [
+          {
+            "sequence": {
+              "values": [
+                {
+                  "byte": {
+                    "value": 45
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 49
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 50
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "step_budget": 500000,
+        "policy": {
+          "effects": "unsupported"
+        }
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1300033,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ],
+      "expected_status": "returned"
+    },
+    {
+      "id": "token-component-spans",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "examples.json_cursor_probe",
+          "function": "token_components"
+        },
+        "arguments": [
+          {
+            "sequence": {
+              "values": [
+                {
+                  "byte": {
+                    "value": 123
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 34
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 97
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 34
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 58
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 91
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 116
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 114
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 117
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 101
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 44
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 45
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 50
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 44
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 49
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 46
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 53
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 44
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 110
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 117
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 108
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 108
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 44
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 34
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 195
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 169
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 34
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 93
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 125
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "step_budget": 500000,
+        "policy": {
+          "effects": "unsupported"
+        }
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 10053133157013,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ],
+      "expected_status": "returned"
+    },
+    {
+      "id": "component-true",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "examples.json_cursor_probe",
+          "function": "token_components"
+        },
+        "arguments": [
+          {
+            "sequence": {
+              "values": [
+                {
+                  "byte": {
+                    "value": 116
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 114
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 117
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 101
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "step_budget": 500000,
+        "policy": {
+          "effects": "unsupported"
+        }
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1004000004000,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ],
+      "expected_status": "returned"
+    },
+    {
+      "id": "component-false",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "examples.json_cursor_probe",
+          "function": "token_components"
+        },
+        "arguments": [
+          {
+            "sequence": {
+              "values": [
+                {
+                  "byte": {
+                    "value": 102
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 97
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 108
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 115
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 101
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "step_budget": 500000,
+        "policy": {
+          "effects": "unsupported"
+        }
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1005000005000,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ],
+      "expected_status": "returned"
+    },
+    {
+      "id": "component-null",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "examples.json_cursor_probe",
+          "function": "token_components"
+        },
+        "arguments": [
+          {
+            "sequence": {
+              "values": [
+                {
+                  "byte": {
+                    "value": 110
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 117
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 108
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 108
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "step_budget": 500000,
+        "policy": {
+          "effects": "unsupported"
+        }
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1006000004000,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ],
+      "expected_status": "returned"
+    },
+    {
+      "id": "component-utf8-string",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "examples.json_cursor_probe",
+          "function": "token_components"
+        },
+        "arguments": [
+          {
+            "sequence": {
+              "values": [
+                {
+                  "byte": {
+                    "value": 34
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 195
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 169
+                  }
+                },
+                {
+                  "byte": {
+                    "value": 34
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "step_budget": 500000,
+        "policy": {
+          "effects": "unsupported"
+        }
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1002000004000,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ],
+      "expected_status": "returned"
+    },
+    {"id":"depth-63-valid-across-chunks","request":{"schema_version":"0.1","target":{"module":"examples.json_cursor_probe","function":"split_validity"},"arguments":[{"sequence":{"values":[{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":48}}]}},{"sequence":{"values":[{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}}]}}],"step_budget":500000,"policy":{"effects":"unsupported"}},"expected":[{"integer":{"value":3,"type":{"bits":64,"signed":true}}}],"expected_status":"returned"},
+    {"id":"depth-64-rejected-across-chunks","request":{"schema_version":"0.1","target":{"module":"examples.json_cursor_probe","function":"split_validity"},"arguments":[{"sequence":{"values":[{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}},{"byte":{"value":91}}]}},{"sequence":{"values":[{"byte":{"value":48}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}},{"byte":{"value":93}}]}}],"step_budget":500000,"policy":{"effects":"unsupported"}},"expected":[{"integer":{"value":0,"type":{"bits":64,"signed":true}}}],"expected_status":"returned"}
   ]
 }

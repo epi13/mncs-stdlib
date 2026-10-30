@@ -117,11 +117,11 @@ declaring-module identities without relying on import discovery order.
 - **Text**: borrowed spans (`std/text_view.v1`), never hidden
   allocation; bounded scanning (`std/text_scan.v1`), UTF-8 validation
   (`std/text_utf8.v1`), tables (`std/text_map.v1`).
-- **JSON**: bounded scanner (`std/json.v1`), structural stream
+- **JSON**: incremental bounded scanner (`std/json.v1`), structural stream
   (`std/json_stream.v1`), raw projections (`std/json_projection.v1`),
-  typed cursor (`std/json_cursor.v1`), canonical emission
-  (`std/json_emit.v1`). No DOM; unknown keys outside the fixed matcher
-  window stay structurally valid.
+  typed cursor and span-bearing token events (`std/json_cursor.v1`),
+  canonical emission (`std/json_emit.v1`). The cursor never builds a DOM;
+  unknown keys outside its fixed matcher window stay structurally valid.
 - **Branchless vectors/masks**: `core/vector.v1` + `core/mask.v1`
   (no physical SIMD width named); `std/simd.v1` adds an
   affine/ReLU/reduction kernel with visible intent.
