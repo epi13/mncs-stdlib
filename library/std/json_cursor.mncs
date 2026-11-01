@@ -1,6 +1,6 @@
 mncs 0.10;
 
-// mncs.std.json_cursor — bounded JSON token-boundary cursor.
+// mncs.std.json_cursor — bounded JSON token-boundary and strict cursor.
 //
 // Full JSON syntax remains owned by json.v1. This cursor is the reusable
 // streaming token bridge: it reports absolute spans for keys, strings,
@@ -19,8 +19,11 @@ mncs 0.10;
 // token_* and the terminator in event on that same step. Container open/close
 // token depths are the corresponding stack-frame indexes. Key bytes remain
 // in a bounded 32-byte matcher window; string_length counts decoded UTF-8
-// bytes. Structural JSON validity remains the responsibility of json.v1.
+// bytes. Full JSON syntax remains owned by json.v1. StrictCursor composes
+// that grammar state with this cursor's stronger string and UTF-8 checks.
 module mncs.std.json_cursor.v1;
+
+use mncs.std.json.v1 as json;
 
 record Cursor {
     position: u64,
@@ -52,6 +55,11 @@ record Cursor {
     token_start: u64,
     token_end: u64,
     token_depth: byte
+}
+
+record StrictCursor {
+    cursor: Cursor,
+    syntax: json.ScanState
 }
 
 fn zero_key() -> (result: [byte; 32]) {
@@ -94,6 +102,10 @@ fn init() -> (result: Cursor) {
         token_end: 0,
         token_depth: 0
     };
+}
+
+fn strict_init() -> (result: StrictCursor) {
+    return StrictCursor { cursor: init(), syntax: json.init() };
 }
 
 // Retained for callers of the earlier packed-stack helper. Cursor now stores
@@ -445,4 +457,37 @@ fn feed_chunk(state: Cursor, input: [byte; up_to 64]) -> (result: Cursor) {
 fn is_valid(state: Cursor) -> (result: bool) {
     let completed: Cursor = finish(state);
     return completed.valid && completed.root_seen && completed.depth == 0 && select(completed.in_string, false, true) && completed.utf8_remaining == 0 && completed.unicode_remaining == 0 && select(completed.pending_high_surrogate, false, true) && select(completed.atom_active, false, true);
+}
+
+// Advance token spans and strict JSON syntax together. Cursor validates
+// escape sequences, surrogate pairs, control bytes, and UTF-8 itself, so the
+// generic grammar state only needs to see the opening and closing quote for
+// strings. This preserves the strict syntax contract while avoiding a
+// second scan of string contents.
+fn strict_feed_byte(state: StrictCursor, value: byte) -> (result: StrictCursor) {
+    let cursor: Cursor = feed_byte(state.cursor, value);
+    let closes_string: bool = state.cursor.in_string
+        && select(cursor.in_string, false, true)
+        && (cursor.event == 2 || cursor.event == 4);
+    let scan_syntax: bool = select(state.cursor.in_string, closes_string, true);
+    if scan_syntax {
+        return StrictCursor {
+            cursor: cursor,
+            syntax: json.scan_step(state.syntax, value)
+        };
+    }
+    return StrictCursor { cursor: cursor, syntax: state.syntax };
+}
+
+fn strict_feed_chunk(state: StrictCursor, input: [byte; up_to 64]) -> (result: StrictCursor) {
+    iterate i over input carrying current: StrictCursor = state {
+        next current = strict_feed_byte(current, input[i]);
+    }
+    return current;
+}
+
+fn strict_is_complete(state: StrictCursor) -> (result: bool) {
+    let syntax: json.ScanState = json.scan_finish_end(state.syntax);
+    return syntax.valid && syntax.depth == 0 && syntax.mode == 0
+        && syntax.expect == 7 && is_valid(state.cursor);
 }

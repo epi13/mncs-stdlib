@@ -71,7 +71,7 @@ form of this table.
 | `std/fixed.mncs` | `mncs.std.fixed.v1` | 0.6 | mncs.std.fixed — blessed milli-scale decimal scores. |
 | `std/fnv1a.mncs` | `mncs.std.fnv1a.v1` | 0.13 | mncs.std.fnv1a — bounded, generic FNV-1a byte folding. |
 | `std/json.mncs` | `mncs.std.json.v1` | 0.13 | mncs.std.json — bounded JSON recognition. |
-| `std/json_cursor.mncs` | `mncs.std.json_cursor.v1` | 0.10 | mncs.std.json_cursor — bounded JSON token-boundary cursor. |
+| `std/json_cursor.mncs` | `mncs.std.json_cursor.v1` | 0.10 | Bounded token spans plus strict streaming validation that reuses UTF-8 and escape checks. |
 | `std/json_emit.mncs` | `mncs.std.json_emit.v1` | 0.13 | mncs.std.json_emit — bounded canonical JSON emission. |
 | `std/json_projection.mncs` | `mncs.std.json_projection.v1` | 0.13 | mncs.std.json.projection — bounded raw key/value projections. |
 | `std/json_stream.mncs` | `mncs.std.json_stream.v1` | 0.13 | mncs.std.json_stream — scalar structural JSON stream state. |
@@ -120,8 +120,10 @@ declaring-module identities without relying on import discovery order.
 - **JSON**: incremental bounded scanner (`std/json.v1`), structural stream
   (`std/json_stream.v1`), raw projections (`std/json_projection.v1`),
   typed cursor and span-bearing token events (`std/json_cursor.v1`),
-  canonical emission (`std/json_emit.v1`). The cursor never builds a DOM;
-  unknown keys outside its fixed matcher window stay structurally valid.
+  canonical emission (`std/json_emit.v1`). `StrictCursor` fuses token events
+  with grammar validation and skips rescanning validated string contents. The
+  cursor never builds a DOM; unknown keys outside its fixed matcher window
+  stay structurally valid.
 - **Branchless vectors/masks**: `core/vector.v1` + `core/mask.v1`
   (no physical SIMD width named); `std/simd.v1` adds an
   affine/ReLU/reduction kernel with visible intent.

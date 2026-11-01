@@ -27,6 +27,35 @@ def test_budget_contract_executes_on_cranelift(root, library_root, mncs_bin, tmp
                for case in report["cases"])
 
 
+def test_json_cursor_strict_contract_executes_on_cranelift(
+    root, library_root, mncs_bin, tmp_path
+):
+    source = os.path.join(root, "examples/source/json-cursor-probe.mncs")
+    corpus = os.path.join(root, "examples/execution/json-cursor-corpus.json")
+    result = run_mncs(mncs_bin, [
+        "experiment", "run", source,
+        "--backend", "cranelift", "--corpus", corpus,
+        "--output-dir", str(tmp_path / "json-cursor"),
+    ], library_root)
+    assert result.returncode == 0, result.stderr
+    with open(tmp_path / "json-cursor/result.json", encoding="utf-8") as handle:
+        report = json.load(handle)
+    case_ids = {case["case_id"] for case in report["cases"]}
+    assert {
+        "reject-trailing-comma",
+        "reject-missing-colon",
+        "reject-leading-zero",
+        "reject-invalid-escape",
+        "valid-root-string",
+        "valid-root-number",
+        "strict-matches-generic-syntax",
+    } <= case_ids
+    assert all(
+        case["status"] == "returned" and case["expectation_met"] is True
+        for case in report["cases"]
+    )
+
+
 def run_mncs(mncs_bin, args, library_root, extra_env=None):
     env = dict(os.environ)
     env["MNCS_LIBRARY_PATH"] = library_root

@@ -25,8 +25,14 @@ fn key_length(input: [byte; up_to 64]) -> (result: i64) {
 }
 
 fn complete(input: [byte; up_to 64]) -> (result: i64) {
-    let state: cursor.Cursor = cursor.feed_chunk(cursor.init(), input);
-    return (cursor.is_valid(state) as i64);
+    let state: cursor.StrictCursor = cursor.strict_feed_chunk(cursor.strict_init(), input);
+    return (cursor.strict_is_complete(state) as i64);
+}
+
+fn strict_matches_syntax(input: [byte; up_to 64]) -> (result: i64) {
+    let strict: cursor.StrictCursor = cursor.strict_feed_chunk(cursor.strict_init(), input);
+    let syntax: json.ScanState = json.feed_chunk(json.init(), input);
+    return ((cursor.strict_is_complete(strict) as i64) == (json.is_valid(syntax) as i64)) as i64;
 }
 
 fn mix_token(digest: u64, kind: byte, start: u64, end: u64, depth: byte) -> (result: u64) {
