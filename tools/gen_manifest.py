@@ -22,7 +22,6 @@ import hashlib
 import json
 import os
 import re
-import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -84,22 +83,6 @@ def collect_modules(library_root):
     return modules
 
 
-def source_commit(root):
-    try:
-        return (
-            subprocess.run(
-                ["git", "rev-parse", "--short", "HEAD"],
-                cwd=root,
-                capture_output=True,
-                text=True,
-                check=True,
-            )
-            .stdout.strip()
-        )
-    except Exception:
-        return "unknown"
-
-
 def build_manifest(root):
     library_root = os.path.join(root, "library")
     modules = collect_modules(library_root)
@@ -128,7 +111,10 @@ def build_manifest(root):
     return {
         "schema_version": SCHEMA,
         "repository": "mncs-stdlib",
-        "source_commit": source_commit(root),
+        # The manifest describes this pinned bundle, not the commit that
+        # happens to contain it. Requiring current HEAD is circular: committing
+        # generated artifacts would immediately make their stamp stale.
+        "source_commit": bundle.get("source_commit", "unknown"),
         "bundle_identity": derived,
         "bundle_path": "dist/stdlib-bundle.json",
         "library_path": "library",

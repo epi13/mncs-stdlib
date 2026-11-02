@@ -33,6 +33,17 @@ def test_requires_profile_within_language_capabilities(root, manifest):
     capabilities_path = os.path.join(
         root, "..", "mncs-language", "docs", "language-capabilities.json"
     )
+    # The Environment may select a Language binary outside this linked
+    # checkout's sibling directory. Inspect that selected producer's source
+    # index when present, rather than silently skipping an available check.
+    selected_binary = os.environ.get("MNCS_BIN")
+    if selected_binary:
+        from pathlib import Path
+        capabilities_path = next((
+            str(parent / "docs/language-capabilities.json")
+            for parent in Path(selected_binary).resolve().parents
+            if (parent / "docs/language-capabilities.json").is_file()
+        ), "")
     if not os.path.isfile(capabilities_path):
         pytest.skip("sibling mncs-language checkout absent; floor check deferred")
     with open(capabilities_path, encoding="utf-8") as handle:

@@ -95,3 +95,32 @@ def test_gen_manifest_check_passes(root):
         text=True,
     )
     assert result.returncode == 0, result.stderr
+
+
+def test_manifest_generation_uses_bundle_provenance_across_commits(root, tmp_path):
+    """A generated artifact cannot require the hash of its containing commit."""
+    import shutil
+    from pathlib import Path
+
+    checkout = tmp_path / "stdlib"
+    checkout.mkdir()
+    for name in ("library", "dist", "tools"):
+        shutil.copytree(Path(root) / name, checkout / name)
+    shutil.copyfile(Path(root) / "stdlib-manifest.json", checkout / "stdlib-manifest.json")
+    subprocess.run(["git", "init", "-b", "main", str(checkout)], check=True, capture_output=True)
+    subprocess.run(["git", "-C", str(checkout), "add", "."], check=True, capture_output=True)
+    for number in (1, 2):
+        (checkout / "note.txt").write_text(f"unrelated progress {number}\n")
+        subprocess.run(["git", "-C", str(checkout), "add", "note.txt"], check=True, capture_output=True)
+        subprocess.run(["git", "-C", str(checkout), "-c", "user.name=Manifest Test", "-c",
+                        "user.email=manifest@example.invalid", "commit", "-m", "progress"],
+                       check=True, capture_output=True)
+        checked = subprocess.run(["python3", "tools/gen_manifest.py", "--check"],
+                                 cwd=checkout, capture_output=True, text=True)
+        assert checked.returncode == 0, checked.stderr
+    module = next((checkout / "library/core").glob("*.mncs"))
+    module.write_text(module.read_text()+"\n// changed content\n")
+    checked = subprocess.run(["python3", "tools/gen_manifest.py", "--check"],
+                             cwd=checkout, capture_output=True, text=True)
+    assert checked.returncode != 0
+    assert "bundle pin diverges" in checked.stderr

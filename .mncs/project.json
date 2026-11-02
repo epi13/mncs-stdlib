@@ -72,7 +72,9 @@
         "test": "stdlib-toolchain",
         "command": {
           "argv": ["python3", "-m", "pytest", "tests/", "-q"],
-          "timeout_seconds": 1200
+          "timeout_seconds": 1200,
+          "toolchain": {"repository": "mncs-language", "path": "target/release/mncs"},
+          "toolchain_env": "MNCS_BIN"
         },
         "covers": ["module-compilation", "consumer-resolution", "compatibility"],
         "obligation": "self"
