@@ -17,3 +17,99 @@ fn summarize_exact(input: ExactEnvelope) -> (result: statlib.StatusSummary) {
 fn summarize_prefix(input: PrefixEnvelope) -> (result: statlib.StatusSummary) {
     return statlib.summarize_prefix<8>(input.statuses, input.count);
 }
+
+fn is_pass(status: statlib.Status) -> (result: bool) {
+    return match status {
+        statlib.Status.PASS => true,
+        statlib.Status.FAIL => false,
+        statlib.Status.UNKNOWN => false,
+    };
+}
+
+fn is_fail(status: statlib.Status) -> (result: bool) {
+    return match status {
+        statlib.Status.PASS => false,
+        statlib.Status.FAIL => true,
+        statlib.Status.UNKNOWN => false,
+    };
+}
+
+fn is_unknown(status: statlib.Status) -> (result: bool) {
+    return match status {
+        statlib.Status.PASS => false,
+        statlib.Status.FAIL => false,
+        statlib.Status.UNKNOWN => true,
+    };
+}
+
+fn exact_first_pass_is_preserved(input: ExactEnvelope) -> (result: bool) {
+    let summary: statlib.StatusSummary = statlib.summarize<2>(input.statuses);
+    return summary.valid
+        && is_pass(summary.status)
+        && summary.pass_count == 2
+        && summary.fail_count == 0
+        && summary.unknown_count == 0
+        && summary.observed_count == 2;
+}
+
+fn prefix_first_pass_ignores_tail(input: PrefixEnvelope) -> (result: bool) {
+    let summary: statlib.StatusSummary = summarize_prefix(input);
+    return summary.valid
+        && is_pass(summary.status)
+        && summary.pass_count == 1
+        && summary.fail_count == 0
+        && summary.unknown_count == 0
+        && summary.observed_count == 1;
+}
+
+fn prefix_empty_stays_unknown(input: PrefixEnvelope) -> (result: bool) {
+    let summary: statlib.StatusSummary = summarize_prefix(input);
+    return summary.valid
+        && is_unknown(summary.status)
+        && summary.pass_count == 0
+        && summary.fail_count == 0
+        && summary.unknown_count == 0
+        && summary.observed_count == 0;
+}
+
+fn prefix_pass_unknown_is_unknown(input: PrefixEnvelope) -> (result: bool) {
+    let summary: statlib.StatusSummary = summarize_prefix(input);
+    return summary.valid
+        && is_unknown(summary.status)
+        && summary.pass_count == 1
+        && summary.fail_count == 0
+        && summary.unknown_count == 1
+        && summary.observed_count == 2;
+}
+
+fn prefix_fail_dominates(input: PrefixEnvelope) -> (result: bool) {
+    let summary: statlib.StatusSummary = summarize_prefix(input);
+    return summary.valid
+        && is_fail(summary.status)
+        && summary.pass_count == 1
+        && summary.fail_count == 1
+        && summary.unknown_count == 1
+        && summary.observed_count == 3;
+}
+
+fn prefix_invalid_count_is_rejected(input: PrefixEnvelope) -> (result: bool) {
+    let summary: statlib.StatusSummary = summarize_prefix(input);
+    if summary.valid {
+        return false;
+    }
+    return is_fail(summary.status)
+        && summary.pass_count == 7
+        && summary.fail_count == 1
+        && summary.unknown_count == 0
+        && summary.observed_count == 8;
+}
+
+fn compatibility_first_pass_is_preserved(input: PrefixEnvelope) -> (result: bool) {
+    let summary: statlib.StatusSummary = statlib.summarize8(input.statuses, input.count);
+    return summary.valid
+        && is_pass(summary.status)
+        && summary.pass_count == 1
+        && summary.fail_count == 0
+        && summary.unknown_count == 0
+        && summary.observed_count == 1;
+}

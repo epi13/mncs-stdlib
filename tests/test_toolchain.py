@@ -111,6 +111,30 @@ def test_generic_consumer_validates(root, library_root, mncs_bin):
     assert json.loads(result.stdout)["valid"]
 
 
+def test_generic_status_summary_contract_executes_on_cranelift(
+    root, library_root, mncs_bin, tmp_path
+):
+    source = os.path.join(root, "examples/source/status-generic-consumer.mncs")
+    corpus = os.path.join(root, "examples/execution/status-summary-consumer-corpus.json")
+    result = run_mncs(
+        mncs_bin,
+        [
+            "experiment", "run", source,
+            "--backend", "cranelift", "--corpus", corpus,
+            "--output-dir", str(tmp_path / "status-summary"),
+        ],
+        library_root,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    with open(tmp_path / "status-summary/result.json", encoding="utf-8") as handle:
+        report = json.load(handle)
+    assert len(report["cases"]) == 7
+    assert all(
+        case["status"] == "returned" and case["expectation_met"] is True
+        for case in report["cases"]
+    )
+
+
 def test_missing_library_fails_closed(root, mncs_bin):
     consumer = os.path.join(root, "examples", "source", "library-consumer.mncs")
     env = dict(os.environ)

@@ -63,9 +63,17 @@ fn dominate4(first: Status, second: Status, third: Status, fourth: Status) -> (r
     return dominate(left, right);
 }
 
+fn summary_join(current: StatusSummary, observed: Status) -> (result: Status) {
+    // UNKNOWN is the empty-envelope sentinel until the first observation.
+    if current.observed_count == 0 {
+        return observed;
+    }
+    return dominate(current.status, observed);
+}
+
 fn summary_step(current: StatusSummary, observed: Status, include: bool) -> (result: StatusSummary) {
     if include {
-        let combined: Status = dominate(current.status, observed);
+        let combined: Status = summary_join(current, observed);
         return match observed {
             PASS => StatusSummary {
                 ..current,

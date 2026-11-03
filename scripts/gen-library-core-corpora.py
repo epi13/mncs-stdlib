@@ -72,6 +72,7 @@ def emit(name, cases):
 
 
 CORE = "mncs.core.status.v1"
+STATUS_CONSUMER = "examples.status.generic_consumer"
 LOGIC = "mncs.core.logic.v1"
 ORDERING = "mncs.core.ordering.v1"
 
@@ -150,6 +151,91 @@ def status_cases():
                     boolean(result),
                 )
             )
+    return cases
+
+
+def status_summary_consumer_cases():
+    """Independent executable contracts for generic bounded status folds."""
+    def sequence(values):
+        return {"sequence": {"values": values}}
+
+    def exact(values):
+        statuses_type = f"[mncs:0.2:finite-type:{CORE}::Status; 2]"
+        return record(
+            STATUS_CONSUMER,
+            "ExactEnvelope",
+            [("statuses", statuses_type)],
+            {"statuses": sequence(values)},
+        )
+
+    def prefix(values, count):
+        padded = (values + [U(CORE)] * 8)[:8]
+        statuses_type = f"[mncs:0.2:finite-type:{CORE}::Status; 8]"
+        return record(
+            STATUS_CONSUMER,
+            "PrefixEnvelope",
+            [("count", "byte"), ("statuses", statuses_type)],
+            {"count": {"byte": {"value": count}}, "statuses": sequence(padded)},
+        )
+
+    cases = [
+        case(
+            "exact-first-pass-preserved",
+            STATUS_CONSUMER,
+            "exact_first_pass_is_preserved",
+            [exact([P(CORE), P(CORE)])],
+            boolean(True),
+            step_budget=100000,
+        ),
+        case(
+            "prefix-first-pass-ignores-tail",
+            STATUS_CONSUMER,
+            "prefix_first_pass_ignores_tail",
+            [prefix([P(CORE), F(CORE), U(CORE)], 1)],
+            boolean(True),
+            step_budget=100000,
+        ),
+        case(
+            "prefix-empty-stays-unknown",
+            STATUS_CONSUMER,
+            "prefix_empty_stays_unknown",
+            [prefix([F(CORE), P(CORE)], 0)],
+            boolean(True),
+            step_budget=100000,
+        ),
+        case(
+            "prefix-pass-unknown-is-unknown",
+            STATUS_CONSUMER,
+            "prefix_pass_unknown_is_unknown",
+            [prefix([P(CORE), U(CORE)], 2)],
+            boolean(True),
+            step_budget=100000,
+        ),
+        case(
+            "prefix-fail-dominates",
+            STATUS_CONSUMER,
+            "prefix_fail_dominates",
+            [prefix([P(CORE), U(CORE), F(CORE)], 3)],
+            boolean(True),
+            step_budget=100000,
+        ),
+        case(
+            "prefix-invalid-count-rejected",
+            STATUS_CONSUMER,
+            "prefix_invalid_count_is_rejected",
+            [prefix([P(CORE)] * 7 + [F(CORE)], 9)],
+            boolean(True),
+            step_budget=100000,
+        ),
+        case(
+            "compatibility-first-pass-preserved",
+            STATUS_CONSUMER,
+            "compatibility_first_pass_is_preserved",
+            [prefix([P(CORE), F(CORE)], 1)],
+            boolean(True),
+            step_budget=100000,
+        ),
+    ]
     return cases
 
 
@@ -467,6 +553,7 @@ def text_map_cases():
 
 def main():
     emit("library-core-status-corpus.json", status_cases())
+    emit("status-summary-consumer-corpus.json", status_summary_consumer_cases())
     emit("text-map-corpus.json", text_map_cases())
     emit("library-core-logic-corpus.json", logic_cases())
     emit("library-core-ordering-corpus.json", ordering_cases())

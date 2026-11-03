@@ -1,0 +1,663 @@
+{
+ "schema_version": "0.1",
+ "name": "status-summary-consumer",
+ "cases": [
+  {
+   "id": "exact-first-pass-preserved",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "examples.status.generic_consumer",
+     "function": "exact_first_pass_is_preserved"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:examples.status.generic_consumer::ExactEnvelope::statuses%3A%5Bmncs%3A0.2%3Afinite-type%3Amncs.core.status.v1%3A%3AStatus%3B%202%5D%3B",
+       "name": "ExactEnvelope",
+       "fields": [
+        [
+         "statuses",
+         {
+          "sequence": {
+           "values": [
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::PASS",
+              "discriminant": 0
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::PASS",
+              "discriminant": 0
+             }
+            }
+           ]
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 100000
+   },
+   "expected": [
+    {
+     "boolean": {
+      "value": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "prefix-first-pass-ignores-tail",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "examples.status.generic_consumer",
+     "function": "prefix_first_pass_ignores_tail"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:examples.status.generic_consumer::PrefixEnvelope::count%3Abyte%3Bstatuses%3A%5Bmncs%3A0.2%3Afinite-type%3Amncs.core.status.v1%3A%3AStatus%3B%208%5D%3B",
+       "name": "PrefixEnvelope",
+       "fields": [
+        [
+         "count",
+         {
+          "byte": {
+           "value": 1
+          }
+         }
+        ],
+        [
+         "statuses",
+         {
+          "sequence": {
+           "values": [
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::PASS",
+              "discriminant": 0
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::FAIL",
+              "discriminant": 1
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            }
+           ]
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 100000
+   },
+   "expected": [
+    {
+     "boolean": {
+      "value": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "prefix-empty-stays-unknown",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "examples.status.generic_consumer",
+     "function": "prefix_empty_stays_unknown"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:examples.status.generic_consumer::PrefixEnvelope::count%3Abyte%3Bstatuses%3A%5Bmncs%3A0.2%3Afinite-type%3Amncs.core.status.v1%3A%3AStatus%3B%208%5D%3B",
+       "name": "PrefixEnvelope",
+       "fields": [
+        [
+         "count",
+         {
+          "byte": {
+           "value": 0
+          }
+         }
+        ],
+        [
+         "statuses",
+         {
+          "sequence": {
+           "values": [
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::FAIL",
+              "discriminant": 1
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::PASS",
+              "discriminant": 0
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            }
+           ]
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 100000
+   },
+   "expected": [
+    {
+     "boolean": {
+      "value": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "prefix-pass-unknown-is-unknown",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "examples.status.generic_consumer",
+     "function": "prefix_pass_unknown_is_unknown"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:examples.status.generic_consumer::PrefixEnvelope::count%3Abyte%3Bstatuses%3A%5Bmncs%3A0.2%3Afinite-type%3Amncs.core.status.v1%3A%3AStatus%3B%208%5D%3B",
+       "name": "PrefixEnvelope",
+       "fields": [
+        [
+         "count",
+         {
+          "byte": {
+           "value": 2
+          }
+         }
+        ],
+        [
+         "statuses",
+         {
+          "sequence": {
+           "values": [
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::PASS",
+              "discriminant": 0
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            }
+           ]
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 100000
+   },
+   "expected": [
+    {
+     "boolean": {
+      "value": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "prefix-fail-dominates",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "examples.status.generic_consumer",
+     "function": "prefix_fail_dominates"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:examples.status.generic_consumer::PrefixEnvelope::count%3Abyte%3Bstatuses%3A%5Bmncs%3A0.2%3Afinite-type%3Amncs.core.status.v1%3A%3AStatus%3B%208%5D%3B",
+       "name": "PrefixEnvelope",
+       "fields": [
+        [
+         "count",
+         {
+          "byte": {
+           "value": 3
+          }
+         }
+        ],
+        [
+         "statuses",
+         {
+          "sequence": {
+           "values": [
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::PASS",
+              "discriminant": 0
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::FAIL",
+              "discriminant": 1
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            }
+           ]
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 100000
+   },
+   "expected": [
+    {
+     "boolean": {
+      "value": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "prefix-invalid-count-rejected",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "examples.status.generic_consumer",
+     "function": "prefix_invalid_count_is_rejected"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:examples.status.generic_consumer::PrefixEnvelope::count%3Abyte%3Bstatuses%3A%5Bmncs%3A0.2%3Afinite-type%3Amncs.core.status.v1%3A%3AStatus%3B%208%5D%3B",
+       "name": "PrefixEnvelope",
+       "fields": [
+        [
+         "count",
+         {
+          "byte": {
+           "value": 9
+          }
+         }
+        ],
+        [
+         "statuses",
+         {
+          "sequence": {
+           "values": [
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::PASS",
+              "discriminant": 0
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::PASS",
+              "discriminant": 0
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::PASS",
+              "discriminant": 0
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::PASS",
+              "discriminant": 0
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::PASS",
+              "discriminant": 0
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::PASS",
+              "discriminant": 0
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::PASS",
+              "discriminant": 0
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::FAIL",
+              "discriminant": 1
+             }
+            }
+           ]
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 100000
+   },
+   "expected": [
+    {
+     "boolean": {
+      "value": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "compatibility-first-pass-preserved",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "examples.status.generic_consumer",
+     "function": "compatibility_first_pass_is_preserved"
+    },
+    "arguments": [
+     {
+      "record": {
+       "type_identity": "mncs:0.2:record-type:examples.status.generic_consumer::PrefixEnvelope::count%3Abyte%3Bstatuses%3A%5Bmncs%3A0.2%3Afinite-type%3Amncs.core.status.v1%3A%3AStatus%3B%208%5D%3B",
+       "name": "PrefixEnvelope",
+       "fields": [
+        [
+         "count",
+         {
+          "byte": {
+           "value": 1
+          }
+         }
+        ],
+        [
+         "statuses",
+         {
+          "sequence": {
+           "values": [
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::PASS",
+              "discriminant": 0
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::FAIL",
+              "discriminant": 1
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            },
+            {
+             "finite": {
+              "type_identity": "mncs:0.2:finite-type:mncs.core.status.v1::Status",
+              "variant_identity": "mncs:0.2:finite-variant:mncs.core.status.v1::Status::UNKNOWN",
+              "discriminant": 2
+             }
+            }
+           ]
+          }
+         }
+        ]
+       ]
+      }
+     }
+    ],
+    "step_budget": 100000
+   },
+   "expected": [
+    {
+     "boolean": {
+      "value": true
+     }
+    }
+   ]
+  }
+ ]
+}
