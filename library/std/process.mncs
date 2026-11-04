@@ -1,4 +1,4 @@
-mncs 0.18;
+mncs 0.19;
 
 // mncs.std.process — the reusable typed explicit-argv process effect.
 //
@@ -14,7 +14,7 @@ enum ProcessStatus { Running, Exited, Cancelled, TimedOut, ResourceExhausted, Ou
 
 record EnvironmentEntry {
     key: [byte; up_to 64],
-    value: [byte; up_to 1024]
+    value: [byte; up_to 4096]
 }
 
 record ProcessResourceEnvelope {
@@ -30,6 +30,9 @@ record ProcessResourceEnvelope {
 // 1024-byte cap already bounds the worst-case request. This capacity must
 // agree with mncs.std.application.v1 and the language runtime's process
 // launch validation.
+// The stdin view uses the Profile 0.19 ceiling of 4096 bytes. This keeps
+// typed process requests large enough for structured tool requests while
+// remaining inside the language's bounded-sequence contract.
 record ProcessRequest {
     program: [byte; up_to 1024],
     argv: [[byte; up_to 1024]; up_to 256],
@@ -38,7 +41,7 @@ record ProcessRequest {
     environment: [EnvironmentEntry; up_to 256],
     environment_count: u64,
     resources: ProcessResourceEnvelope,
-    stdin: [byte; up_to 1024],
+    stdin: [byte; up_to 4096],
     stdout_limit: u64,
     stderr_limit: u64,
     deadline_ms: u64
