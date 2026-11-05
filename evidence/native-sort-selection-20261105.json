@@ -1,0 +1,52 @@
+{
+  "schema_version": "mncs.development-evidence/1",
+  "campaign_id": "cmp_luna_max_native_ecosystem_20261105_0400z",
+  "session_id": "ses_c0fd0038007a104f",
+  "environment_id": "renv_2914f9dfe3006e71",
+  "work_intent_id": "int_d6f32f003a883dab",
+  "scope_grant_id": "scope_dad9dde2a6b16ed8",
+  "claim_id": "claim:mncs-stdlib:worktree:5e1b8b2771a3",
+  "capability": "mncs.std.sort.v1",
+  "responsibility": "Sort a bounded unsigned-integer window in MNCS with quadratic comparisons and at most two array writes per pass.",
+  "source": {
+    "path": "library/std/sort.mncs",
+    "profile": "0.13",
+    "sha256": "6cbd9675acde624eaadb1f556c64d7e893d0c096bd9a13d39770e6bb5e9ca322",
+    "source_artifact_identity": "mncs:source:artifact:d32f7581414376af76c73fc023f36bf08be019eb95d5ff00925ae0bb8bc4200d"
+  },
+  "distribution": {
+    "bundle_identity": "mncs:stdlib-bundle:a68cdd3e738b39647d79fbf139d5456594c9ebf0944190f86e78c560399b5cbc",
+    "bundle_sha256": "1f49259281f881946df95a2fe7105a968e0da1f66dc0a5723c2608010abc08d5",
+    "manifest_sha256": "007c51e9d9bd9a846a8a20b581e41af923bb27d588bb47e498da47e52d35c6f8"
+  },
+  "verification": {
+    "generator": "python3 scripts/gen_collection_corpora.py",
+    "artifact_freshness": "MNCS bundle verify and ./tools/regen.sh --check passed",
+    "cranelift_experiment_identity": "mncs:language:experiment:result:bd1cfcbd38a85391d1c378df926576ba95b89bdf8416d6a8213ac94b51b67f50",
+    "compiler_identity": "mncs:compiler:compiler:f862227638ca7fbc716123d8378cddfef4f76a9ef10ab0e99cc791e65207e45d",
+    "backend": "mncs-cranelift",
+    "corpus_sha256": "10578b3bcd5783487f5bf32e235c673926939bfb554da57d81800a3d218d0ec6",
+    "case_count": 5,
+    "all_cases_returned_expected_values": true,
+    "sort_window64": {
+      "step_budget": 100000,
+      "expected_witness": 30806465,
+      "status": "returned",
+      "expectation_met": true
+    },
+    "experiment_formal_status": "UNKNOWN",
+    "unresolved_reasons": [
+      "compilation retained required unresolved obligations"
+    ],
+    "pytest": {
+      "full_suite": "29 passed, 1 failed",
+      "known_failure": "test_compat.py::test_requires_profile_within_toolchain_floor_via_info_tool",
+      "failure_reason": "test hardcodes a 0.18 toolchain ceiling while the committed stdlib manifest requires profile 0.19; test_compat.py is unchanged from origin/main",
+      "remaining_suite": "29 passed, 1 deselected"
+    }
+  },
+  "limits": [
+    "The experiment's per-case expected values passed, but aggregate formal status remains UNKNOWN because compiler obligations are unresolved.",
+    "The 64-element Service consumer window remains to be verified downstream."
+  ]
+}

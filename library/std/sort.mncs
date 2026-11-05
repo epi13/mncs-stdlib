@@ -4,17 +4,16 @@ mncs 0.13;
 //
 // Corpus-scale ordering (PRESS-014) is host-driven iteration over these
 // total bounded primitives, never host comparison logic: `sort_up`
-// insertion-sorts a `[u64; N]` window in place by value, `dedup_sorted`
+// selection-sorts a `[u64; N]` window in place by value, `dedup_sorted`
 // compacts a sorted window, and `is_sorted` witnesses orderedness. Rows
 // are host-assigned u64 codes (the `token_set` pattern: spellings map to
 // codes at the capability boundary), so ordering policy stays numeric,
 // allocation-free, and identical on every backend. Ties cannot occur on
 // scalar codes; multi-field rows order by their packed code.
 //
-// Complexity bounds (N <= 8 by these entry points; the generic cores
-// range over any N <= MAX_SEQUENCE_BOUND):
+// Complexity bounds (N <= MAX_SEQUENCE_BOUND):
 //   is_sorted / dedup pass  <= N comparisons
-//   insertion sort           <= N*N comparisons, N*N moves
+//   selection sort           <= N*N comparisons, <= 2*N array writes
 // No operation allocates; every function is total over its declared
 // domain, including empty (`count == 0`) and saturated windows.
 module mncs.std.sort.v1;
@@ -52,14 +51,34 @@ fn insert_step<N: Nat>(xs: [u64; N], count: u64, at: u64) -> (result: [u64; N]) 
     return row;
 }
 
-// Insertion sort over the logical window: after pass `at`, the prefix
-// `0..=at` is ordered. Passes at or beyond `count` run the `at == 0`
-// pass, which is the identity, so no array-valued select is needed and
-// the tail beyond `count` is never observed.
+// Find the least value in [start, limit). `limit` is already clamped to
+// storage; candidate and best projections remain in bounds even for an
+// empty logical window.
+fn minimum_index<N: Nat>(xs: [u64; N], start: u64, limit: u64) -> (result: u64) {
+    let initial: u64 = select(start < limit, start, 0);
+    iterate candidate over xs carrying best: u64 = initial {
+        let safe_best: u64 = select(best < xs.len, best, 0);
+        let live: bool = candidate >= start && candidate < limit;
+        let better: bool = live && xs[candidate] < xs[safe_best];
+        next best = select(better, candidate, best);
+    }
+    return best;
+}
+
+// Selection sort over the logical window: after pass `at`, the prefix
+// through `at` is ordered. Each pass scans the suffix and swaps at most
+// two array cells. Out-of-window passes select their original values, so
+// count==0, oversized counts, and empty storage remain total.
 fn sort_up<N: Nat>(xs: [u64; N], count: u64) -> (result: [u64; N]) {
+    let limit: u64 = select(count < xs.len, count, xs.len);
     iterate at over xs carrying row: [u64; N] = xs {
-        let bounded: u64 = select(at < count, at, 0);
-        next row = insert_step(row, count, bounded);
+        let smallest: u64 = minimum_index(row, at, limit);
+        let swap: bool = at < limit && smallest < limit && at != smallest;
+        let at_value: u64 = row[at];
+        let min_value: u64 = row[smallest];
+        let kept_at: u64 = select(swap, min_value, at_value);
+        let kept_min: u64 = select(swap, at_value, min_value);
+        next row = replace(replace(row, at, kept_at), smallest, kept_min);
     }
     return row;
 }
@@ -108,4 +127,19 @@ fn candidate_sort_edges(empty_count: u64, one: [u64; 8], one_count: u64) -> (res
     let ordered_one: [u64; 8] = sort_up(one, one_count);
     let distinct_one: u64 = dedup_sorted_count(ordered_one, one_count);
     return select(sorted_empty, 1000, 0) + distinct_empty as i64 * 100 + distinct_one as i64;
+}
+
+// A full 64-value reverse window sorts to 1..64. Pack orderedness,
+// sum, distinct count, and endpoints so the independent corpus expectation
+// checks both ordering and preservation of the input multiset.
+fn candidate_sort_window64(xs: [u64; 64], count: u64) -> (result: i64) {
+    let ordered: [u64; 64] = sort_up(xs, count);
+    let sorted: bool = is_sorted(ordered, count);
+    iterate i over ordered carrying total: u64 = 0 {
+        next total = total +% select(i < count, ordered[i], 0);
+    }
+    let distinct: u64 = dedup_sorted_count(ordered, count);
+    let last: u64 = select(count > 0 && count <= ordered.len, count -% 1, 0);
+    return select(sorted, 10000000, 0) + total as i64 * 10000
+        + distinct as i64 * 100 + ordered[0] as i64 + ordered[last] as i64;
 }

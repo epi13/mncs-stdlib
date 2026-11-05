@@ -135,6 +135,31 @@ def test_generic_status_summary_contract_executes_on_cranelift(
     )
 
 
+def test_sort_contract_executes_on_cranelift(root, library_root, mncs_bin, tmp_path):
+    source = os.path.join(root, "library", "std", "sort.mncs")
+    corpus = os.path.join(root, "examples", "execution", "sort-corpus.json")
+    result = run_mncs(
+        mncs_bin,
+        [
+            "experiment", "run", source,
+            "--backend", "cranelift", "--corpus", corpus,
+            "--output-dir", str(tmp_path / "sort"),
+        ],
+        library_root,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    with open(tmp_path / "sort/result.json", encoding="utf-8") as handle:
+        report = json.load(handle)
+    cases = {case["case_id"]: case for case in report["cases"]}
+    assert {
+        "sort-dedup", "sort-reverse", "sort-saturated-window", "sort-edges", "sort-window64"
+    } <= cases.keys()
+    assert all(
+        case["status"] == "returned" and case["expectation_met"] is True
+        for case in cases.values()
+    )
+
+
 def test_missing_library_fails_closed(root, mncs_bin):
     consumer = os.path.join(root, "examples", "source", "library-consumer.mncs")
     env = dict(os.environ)

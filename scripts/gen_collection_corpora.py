@@ -33,14 +33,14 @@ def u64_seq(values):
     return {"sequence": {"values": [u64(v) for v in values]}}
 
 
-def case(cid, module, function, arguments, expected):
+def case(cid, module, function, arguments, expected, step_budget=300000):
     return {
         "id": cid,
         "request": {
             "schema_version": "0.1",
             "target": {"module": module, "function": function},
             "arguments": arguments,
-            "step_budget": 300000,
+            "step_budget": step_budget,
         },
         "expected": [i64(expected)],
     }
@@ -67,9 +67,18 @@ sort_cases = [
     # Reversed input converges: first 1, last 8.
     case("sort-reverse", SORT, "candidate_sort_reverse",
          [u64_seq([8, 7, 6, 5, 4, 3, 2, 1]), u64(8)], 18),
+    # Counts beyond storage saturate to the full eight-value window.
+    case("sort-saturated-window", SORT, "candidate_sort_dedup",
+         [u64_seq([5, 3, 5, 1, 4, 2, 2, 0]), u64(99)], 16),
     # Empty window ordered with count 0; singleton distinct 1.
     case("sort-edges", SORT, "candidate_sort_edges",
          [u64(0), u64_seq([7, 0, 0, 0, 0, 0, 0, 0]), u64(1)], 1001),
+    # Full reverse-ordered 64-value window sorts to 1..64. The result
+    # witnesses order, total, distinct count, and endpoints at the
+    # Language Service consumer's 100k native step ceiling.
+    case("sort-window64", SORT, "candidate_sort_window64",
+         [u64_seq(list(range(64, 0, -1))), u64(64)], 30806465,
+         step_budget=100000),
 ]
 
 RELATION = "mncs.std.relation.v1"
