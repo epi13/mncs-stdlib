@@ -79,7 +79,7 @@ form of this table.
 | `std/process.mncs` | `mncs.std.process.v1` | 0.18 | mncs.std.process — the reusable typed explicit-argv process effect. |
 | `std/relation.mncs` | `mncs.std.relation.v1` | 0.13 | mncs.std.relation — bounded deterministic edge sets with transitive closure. |
 | `std/scope.mncs` | `mncs.std.scope.v1` | 0.13 | mncs.std.scope — deterministic structured task-scope contracts. |
-| `std/sha256.mncs` | `mncs.std.sha256.v1` | 0.14 | mncs.std.sha256 — SHA-256 as pure bounded MNCS (index PRESS-006). |
+| `std/sha256.mncs` | `mncs.std.sha256.v1` | 0.14 | mncs.std.sha256 — streaming SHA-256 plus one-shot digest for up to 1024 bytes. |
 | `std/simd.mncs` | `mncs.std.simd.v1` | 0.8 | mncs.std.simd — compositional numerical kernels over semantic vectors. |
 | `std/sort.mncs` | `mncs.std.sort.v1` | 0.13 | mncs.std.sort — deterministic bounded sort and deduplication. |
 | `std/store.mncs` | `mncs.std.store.v1` | 0.13 | mncs.std.store — durable-state transition contracts (index PRESS-013/ 016/017/018, RFC 0026 substrate). |

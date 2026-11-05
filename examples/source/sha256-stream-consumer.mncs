@@ -1,0 +1,21 @@
+mncs 0.14;
+
+// Independent consumer contract for hashing file-sized inputs through
+// consecutive bounded Stdlib updates.
+module examples.sha256.stream_consumer;
+
+use mncs.std.sha256.v1 as sha256;
+
+fn digest_four_chunks(
+    first: [byte; up_to 1024],
+    second: [byte; up_to 1024],
+    third: [byte; up_to 1024],
+    fourth: [byte; up_to 1024]
+) -> (result: [byte; 32]) {
+    let start: sha256.DigestState = sha256.init();
+    let after_first: sha256.DigestState = sha256.update_blocks_standard(start, first);
+    let after_second: sha256.DigestState = sha256.update_blocks_standard(after_first, second);
+    let after_third: sha256.DigestState = sha256.update_blocks_standard(after_second, third);
+    let after_fourth: sha256.DigestState = sha256.update_blocks_standard(after_third, fourth);
+    return sha256.finalize_standard(after_fourth);
+}

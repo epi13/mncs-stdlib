@@ -231,6 +231,49 @@ fn finalize_standard(st: DigestState) -> (result: [byte; 32]) {
     return finalize(st, standard_round_constants());
 }
 
+// Materialize one block while keeping the partial tail's runtime length
+// separate. Storage after the input is zero-filled; update_standard consumes
+// only chunk_length bytes and applies SHA-256 padding during finalization.
+fn block_bytes(data: [byte; up_to 1024], block_start: u64) -> (result: [byte; 64]) {
+    let zero_block: [byte; 64] = [0; 64];
+    iterate offset over zero_block carrying bytes: [byte; 64] = zero_block {
+        let position: u64 = block_start +% offset;
+        let safe_position: u64 = select(position < data.len, position, 0);
+        let value: byte = data[safe_position];
+        next bytes = replace(bytes, offset, select(position < data.len, value, 0));
+    }
+    return bytes;
+}
+
+// Absorb a bounded view containing at most sixteen blocks. Repeated calls
+// with consecutive input views preserve the ordinary SHA-256 stream state,
+// allowing host adapters to hash arbitrarily sized files without owning the
+// digest algorithm.
+fn update_blocks_standard(st: DigestState, data: [byte; up_to 1024]) -> (result: DigestState) {
+    if data.len == 0 {
+        return st;
+    }
+    let block_indices: [u64; 16] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+    let block_count: u64 = (data.len +% 63) / 64;
+    iterate block over block_indices carrying state: DigestState = st {
+        let block_start: u64 = block *% 64;
+        let remaining: u64 = data.len -% block_start;
+        let active: bool = block < block_count;
+        let active_length: u64 = select(remaining < 64, remaining, 64);
+        let chunk_length: u64 = select(active, active_length, 0);
+        let chunk: [byte; 64] = block_bytes(data, block_start);
+        next state = update_standard(state, chunk, chunk_length);
+    }
+    return state;
+}
+
+// One-shot SHA-256 for a bounded input. The 1024-byte view uses the same
+// streaming state API consumed by file-oriented host adapters.
+fn digest_standard(data: [byte; up_to 1024]) -> (result: [byte; 32]) {
+    let state: DigestState = update_blocks_standard(init(), data);
+    return finalize_standard(state);
+}
+
 // Eight words to 32 big-endian bytes.
 fn state_to_bytes(h: [u32; 8]) -> (result: [byte; 32]) {
     let seed: [byte; 32] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
