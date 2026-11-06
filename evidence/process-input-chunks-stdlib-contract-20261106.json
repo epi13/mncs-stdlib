@@ -1,0 +1,54 @@
+{
+  "schema_version": "mncs.stdlib.process-input-contract-evidence/1",
+  "identity": "process-input-chunks-stdlib-contract-20261106",
+  "pressure": {
+    "identity": "MNCS-LANG-9342C3B5FB80",
+    "title": "Typed process transport cannot carry real Forge verification requests",
+    "required_behavior": "A source-visible bounded process input contract that admits declared verification request sizes without host semantic fallback or silent truncation."
+  },
+  "contract": {
+    "module": "mncs.std.process.v1",
+    "profile": "0.19",
+    "source_path": "library/std/process.mncs",
+    "source_identity": "sha256:6043a3aa2be1c664fa7004cc68f1d28874df261cc4834c47b89d99dbba35b4f4",
+    "initial_chunk_bytes": 4096,
+    "continuation_chunk_bytes": 4096,
+    "continuation_chunk_count": 256,
+    "maximum_input_bytes": 1052672,
+    "capability": "process_capability",
+    "effect": "process_run"
+  },
+  "consumer_limit": {
+    "repository": "mncs-forge",
+    "path": "src/mncs_forge/resources/mncs-forge-config.schema.json",
+    "declared_maximum_request_bytes": 1048576
+  },
+  "bundle": {
+    "identity": "mncs:stdlib-bundle:c54ea81fe35762060606d2c4fafde558034524c90389952108dd2aaae10e7c29",
+    "generated_and_verified": true,
+    "manifest_current": true
+  },
+  "verification": {
+    "targeted": {
+      "command": "MNCS_BIN=<selected-mncs> python3 -m pytest tests/test_process_contract.py tests/test_toolchain.py -q",
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0
+    },
+    "full_suite": {
+      "command": "MNCS_BIN=<selected-mncs> python3 -m pytest tests/ -q",
+      "passed": 33,
+      "failed": 0,
+      "skipped": 0
+    },
+    "bundle_check": {
+      "command": "MNCS_BIN=<selected-mncs> ./tools/regen.sh --check",
+      "status": "passed"
+    }
+  },
+  "integration_status": {
+    "language_runtime_chunk_validation_and_flattening": "pending",
+    "forge_native_process_consumer": "pending",
+    "end_to_end_large_stdin_execution": "pending"
+  }
+}

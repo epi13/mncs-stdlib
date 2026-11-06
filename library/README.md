@@ -76,7 +76,7 @@ form of this table.
 | `std/json_projection.mncs` | `mncs.std.json_projection.v1` | 0.13 | mncs.std.json.projection — bounded raw key/value projections. |
 | `std/json_stream.mncs` | `mncs.std.json_stream.v1` | 0.13 | mncs.std.json_stream — scalar structural JSON stream state. |
 | `std/platform.mncs` | `mncs.std.platform.v1` | 0.6 | mncs.std.platform — portable finite-domain platform vocabulary. |
-| `std/process.mncs` | `mncs.std.process.v1` | 0.18 | mncs.std.process — the reusable typed explicit-argv process effect. |
+| `std/process.mncs` | `mncs.std.process.v1` | 0.19 | mncs.std.process — the reusable typed explicit-argv process effect with bounded multi-chunk stdin. |
 | `std/relation.mncs` | `mncs.std.relation.v1` | 0.13 | mncs.std.relation — bounded deterministic edge sets with transitive closure. |
 | `std/scope.mncs` | `mncs.std.scope.v1` | 0.13 | mncs.std.scope — deterministic structured task-scope contracts. |
 | `std/sha256.mncs` | `mncs.std.sha256.v1` | 0.14 | mncs.std.sha256 — streaming SHA-256 plus one-shot digest for up to 1024 bytes. |

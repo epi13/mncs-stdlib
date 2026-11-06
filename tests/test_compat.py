@@ -20,13 +20,21 @@ def test_requires_profile_within_toolchain_floor_via_info_tool(root, manifest):
         capture_output=True,
         text=True,
     )
+    assert result.returncode == 3, "profile 0.18 must not satisfy process profile 0.19"
+    assert "compatible: NO" in result.stdout, result.stdout
+    result = subprocess.run(
+        ["python3", info, "--root", root, "compatible", "--max-profile", "0.19"],
+        capture_output=True,
+        text=True,
+    )
     assert result.returncode == 0, result.stdout
+    assert "compatible: yes" in result.stdout, result.stdout
     result = subprocess.run(
         ["python3", info, "--root", root, "compatible", "--max-profile", "0.5"],
         capture_output=True,
         text=True,
     )
-    assert result.returncode == 3, "profile 0.5 toolchain must not satisfy 0.18 stdlib"
+    assert result.returncode == 3, "profile 0.5 toolchain must not satisfy 0.19 stdlib"
 
 
 def test_requires_profile_within_language_capabilities(root, manifest):
