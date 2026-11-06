@@ -1,0 +1,20 @@
+mncs 0.10;
+
+// Independent consumer for process-result status classification.
+module examples.status.execution_result_consumer;
+
+use mncs.core.status as statlib;
+
+fn classify(
+    has_exit_status: bool,
+    exit_status: i64,
+    has_reported_status: bool,
+    reported_status: statlib.Status
+) -> (result: statlib.Status) {
+    return statlib.classify_execution_result(
+        has_exit_status,
+        exit_status,
+        has_reported_status,
+        reported_status
+    );
+}

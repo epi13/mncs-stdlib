@@ -150,6 +150,10 @@ declaring-module identities without relying on import discovery order.
   `PASS` or deletes `FAIL`. The negative fixture
   `examples/source/library-core-status-wrong.mncs` proves the corpus
   discriminates an UNKNOWN-laundering mutant on exactly that cell.
+- `core.status.classify_execution_result` treats a nonzero process exit as
+  `FAIL`, accepts a structured result only after a zero exit, and leaves a
+  missing exit or missing structured result as `UNKNOWN`. A successful
+  command alone never establishes `PASS`.
 - `ordering` deliberately avoids contract clauses: current profiles
   cannot discharge contract-evidence obligations from source.
   Preconditions are documented in comments instead.

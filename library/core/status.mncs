@@ -160,6 +160,29 @@ fn is_decided(subject: Status) -> (result: bool) {
     };
 }
 
+// Classify one bounded command observation. A nonzero exit status is a
+// negative result even if the command also emitted a passing claim. A zero
+// exit status is not itself evidence of PASS: it needs a separately
+// validated structured result. Missing execution or missing structured
+// evidence remains UNKNOWN.
+fn classify_execution_result(
+    has_exit_status: bool,
+    exit_status: i64,
+    has_reported_status: bool,
+    reported_status: Status
+) -> (result: Status) {
+    if !has_exit_status {
+        return Status.UNKNOWN;
+    }
+    if exit_status != 0 {
+        return Status.FAIL;
+    }
+    if has_reported_status {
+        return reported_status;
+    }
+    return Status.UNKNOWN;
+}
+
 // Dominance test without materializing a join result: `left` dominates
 // `right` exactly when joining them yields `left`.
 fn dominates(left: Status, right: Status) -> (result: bool) {

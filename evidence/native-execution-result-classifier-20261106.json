@@ -1,0 +1,63 @@
+{
+  "schema_version": "mncs.native-consumption-evidence/1",
+  "campaign_id": "cmp_luna_native_ecosystem_20261106_0856z",
+  "session_id": "ses_bc9fbd95a4154de8",
+  "work_intent_id": "int_d6f32f003a883dab",
+  "repository": "mncs-stdlib",
+  "branch": "campaign/luna-stdlib-execution-result-20261106",
+  "checkout_identity": "checkout:1b4fa4731ffd5147",
+  "implementation": {
+    "module": "mncs.core.status.v1",
+    "function": "classify_execution_result",
+    "source_path": "library/core/status.mncs",
+    "source_content_sha256": "f9b9ec6387c72a831bec6d7af0308bd406972c73793178415dfbd4b569e8cd29",
+    "bundle_identity": "mncs:stdlib-bundle:531e253cfdb8ffaa4139fead626db60f94e3878edebaa615d377f843a4d5c831",
+    "bundle_path": "dist/stdlib-bundle.json",
+    "responsibilities": [
+      "classify bounded command outcomes from process exit and validated structured status",
+      "give nonzero exit precedence over a reported PASS",
+      "preserve UNKNOWN when execution or structured evidence is missing"
+    ]
+  },
+  "consumer_contract": {
+    "source_path": "examples/source/status-execution-result-consumer.mncs",
+    "corpus_path": "examples/execution/status-execution-result-corpus.json",
+    "independent_cases": 7,
+    "cases": [
+      "zero exit with reported PASS",
+      "zero exit with reported UNKNOWN",
+      "zero exit with reported FAIL",
+      "nonzero exit overrides reported PASS",
+      "nonzero exit without report",
+      "zero exit without report",
+      "missing exit despite reported PASS"
+    ]
+  },
+  "toolchain": {
+    "binary": "/home/epi13/Documents/Projects/mncs-language/target/release/mncs",
+    "sha256": "cc06a0576e04378131af28a75098895638e322118ab8bb6d3ff7f94c87ca1dcd",
+    "backend": "cranelift"
+  },
+  "verification": [
+    {
+      "command": "MNCS_BIN=<selected-mncs> ./tools/regen.sh",
+      "status": "PASS",
+      "result": "Generated and verified 65 modules; updated bundle identity and manifest."
+    },
+    {
+      "command": "MNCS_BIN=<selected-mncs> ./tools/regen.sh --check",
+      "status": "PASS",
+      "result": "Committed bundle and manifest match the library sources."
+    },
+    {
+      "command": "MNCS_BIN=<selected-mncs> python3 -m pytest tests/test_toolchain.py::test_execution_result_classification_contract_executes_on_cranelift -q",
+      "status": "PASS",
+      "result": "1 passed; all 7 corpus cases returned the independent expected status."
+    }
+  ],
+  "status": "verified",
+  "limitations": [
+    "The targeted consumer contract and bundle checks were run; the full Stdlib suite was not run for this slice.",
+    "The classifier requires the host adapter to validate structured status values before passing them to MNCS."
+  ]
+}

@@ -135,6 +135,30 @@ def test_generic_status_summary_contract_executes_on_cranelift(
     )
 
 
+def test_execution_result_classification_contract_executes_on_cranelift(
+    root, library_root, mncs_bin, tmp_path
+):
+    source = os.path.join(root, "examples/source/status-execution-result-consumer.mncs")
+    corpus = os.path.join(root, "examples/execution/status-execution-result-corpus.json")
+    result = run_mncs(
+        mncs_bin,
+        [
+            "experiment", "run", source,
+            "--backend", "cranelift", "--corpus", corpus,
+            "--output-dir", str(tmp_path / "status-execution-result"),
+        ],
+        library_root,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    with open(tmp_path / "status-execution-result/result.json", encoding="utf-8") as handle:
+        report = json.load(handle)
+    assert len(report["cases"]) == 7
+    assert all(
+        case["status"] == "returned" and case["expectation_met"] is True
+        for case in report["cases"]
+    )
+
+
 def test_text_utf8_whitespace_contract_executes_on_cranelift(
     root, library_root, mncs_bin, tmp_path
 ):
