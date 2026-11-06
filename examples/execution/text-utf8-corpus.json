@@ -2030,6 +2030,1458 @@
      }
     }
    ]
+  },
+  {
+   "id": "whitespace-positive-0009",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 9,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-000a",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 10,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-000b",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 11,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-000c",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 12,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-000d",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 13,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-0020",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 32,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-0085",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 133,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-00a0",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 160,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-1680",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 5760,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-2000",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8192,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-2001",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8193,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-2002",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8194,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-2003",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8195,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-2004",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8196,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-2005",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8197,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-2006",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8198,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-2007",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8199,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-2008",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8200,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-2009",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8201,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-200a",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8202,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-2028",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8232,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-2029",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8233,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-202f",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8239,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-205f",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8287,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-positive-3000",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 12288,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 1,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-negative-0008",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-negative-000e",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 14,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-negative-001f",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 31,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-negative-0021",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 33,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-negative-0084",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 132,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-negative-0086",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 134,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-negative-00a1",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 161,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-negative-167f",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 5759,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-negative-1681",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 5761,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-negative-1fff",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8191,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-negative-200b",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8203,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-negative-2027",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8231,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-negative-202a",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8234,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-negative-2030",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8240,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-negative-205e",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 8286,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-negative-3001",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 12289,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-negative-feff",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 65279,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-negative-d800",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 55296,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "whitespace-negative-110000",
+   "request": {
+    "schema_version": "0.1",
+    "target": {
+     "module": "mncs.std.text_utf8.v1",
+     "function": "candidate_whitespace"
+    },
+    "arguments": [
+     {
+      "integer": {
+       "value": 1114112,
+       "type": {
+        "bits": 32,
+        "signed": false
+       }
+      }
+     }
+    ],
+    "step_budget": 60000
+   },
+   "expected": [
+    {
+     "integer": {
+      "value": 0,
+      "type": {
+       "bits": 64,
+       "signed": true
+      }
+     }
+    }
+   ]
   }
  ]
 }

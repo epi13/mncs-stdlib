@@ -86,7 +86,7 @@ form of this table.
 | `std/task.mncs` | `mncs.std.task.v1` | 0.8 | mncs.std.task — bounded task/cancellation lifecycle seed. |
 | `std/text_map.mncs` | `mncs.std.text_map.v1` | 0.13 | mncs.std.text_map.v1 — bounded text-to-code tables. |
 | `std/text_scan.mncs` | `mncs.std.text_scan.v1` | 0.13 | mncs.std.text_scan — bounded literal text scanning over byte views. |
-| `std/text_utf8.mncs` | `mncs.std.text_utf8.v1` | 0.13 | mncs.std.text_utf8 — bounded UTF-8 validation, scalar stepping, and a deliberately small case fold over byte views. |
+| `std/text_utf8.mncs` | `mncs.std.text_utf8.v1` | 0.13 | mncs.std.text_utf8 — bounded UTF-8 validation, scalar stepping, Unicode White_Space classification, and a deliberately small case fold over byte views. |
 | `std/text_view.mncs` | `mncs.std.text_view.v1` | 0.10 | mncs.std.text_view — bounded, host-neutral text references. |
 | `std/token_set.mncs` | `mncs.std.token_set.v1` | 0.13 | mncs.std.token_set — deterministic bounded token-set algebra. |
 | `family/coherence.mncs` | `mncs.family.coherence.v01` | 0.13 | mncs.family.coherence — the MNCS-native decision core of the family coherence system. |

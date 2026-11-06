@@ -152,6 +152,19 @@ fn step_scalar_generic<N: Nat>(view: [byte; up_to N], view_length: u64, at: u64)
     return ScalarStep { scalar: wide as u32, next: at + 4, valid: true };
 }
 
+// Classify one Unicode scalar using the Unicode White_Space property.
+// Values outside the scalar range, including surrogates, are not whitespace.
+fn is_whitespace_scalar(scalar: u32) -> (result: bool) {
+    let value: u64 = scalar as u64;
+    if value >= 9 && value <= 13 { return true; }
+    if value == 32 || value == 133 || value == 160 || value == 5760 { return true; }
+    if value >= 8192 && value <= 8202 { return true; }
+    if value == 8232 || value == 8233 || value == 8239 || value == 8287 || value == 12288 {
+        return true;
+    }
+    return false;
+}
+
 // Deliberately bounded case fold over one scalar: ASCII A-Z gains 0x20,
 // Latin-1 capitals U+00C0-U+00D6 and U+00D8-U+00DE gain 0x20. Everything
 // else is identity — including U+00D7 (multiplication sign, caseless),
@@ -204,4 +217,9 @@ fn candidate_fold() -> (result: i64) {
     let sharp: i64 = (fold_scalar(223) as u64) as i64;
     let small: i64 = (fold_scalar(233) as u64) as i64;
     return a * 10000000000000000 + e * 100000000000 + mul * 1000000 + sharp * 1000 + small;
+}
+
+// Expose the Unicode White_Space classifier to the independent execution corpus.
+fn candidate_whitespace(scalar: u32) -> (result: i64) {
+    return select(is_whitespace_scalar(scalar), 1, 0);
 }

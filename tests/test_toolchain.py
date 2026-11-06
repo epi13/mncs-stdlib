@@ -135,6 +135,34 @@ def test_generic_status_summary_contract_executes_on_cranelift(
     )
 
 
+def test_text_utf8_whitespace_contract_executes_on_cranelift(
+    root, library_root, mncs_bin, tmp_path
+):
+    source = os.path.join(root, "library", "std", "text_utf8.mncs")
+    corpus = os.path.join(root, "examples", "execution", "text-utf8-corpus.json")
+    result = run_mncs(
+        mncs_bin,
+        [
+            "experiment", "run", source,
+            "--backend", "cranelift", "--corpus", corpus,
+            "--output-dir", str(tmp_path / "text-utf8"),
+        ],
+        library_root,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    with open(tmp_path / "text-utf8/result.json", encoding="utf-8") as handle:
+        report = json.load(handle)
+    whitespace_cases = [
+        case for case in report["cases"]
+        if case["case_id"].startswith("whitespace-")
+    ]
+    assert len(whitespace_cases) == 44
+    assert all(
+        case["status"] == "returned" and case["expectation_met"] is True
+        for case in whitespace_cases
+    )
+
+
 def test_sort_contract_executes_on_cranelift(root, library_root, mncs_bin, tmp_path):
     source = os.path.join(root, "library", "std", "sort.mncs")
     corpus = os.path.join(root, "examples", "execution", "sort-corpus.json")
