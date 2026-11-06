@@ -1,0 +1,282 @@
+{
+  "schema_version": "0.1",
+  "name": "text-utf8-lowercase",
+  "cases": [
+    {
+      "id": "ascii",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.std.text_utf8.v1",
+          "function": "candidate_lowercase_ascii"
+        },
+        "arguments": [],
+        "step_budget": 1000000
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1009498345,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "dotted-i-expansion",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.std.text_utf8.v1",
+          "function": "candidate_lowercase_dotted_i"
+        },
+        "arguments": [],
+        "step_budget": 1000000
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1010054015,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "supplementary-deseret",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.std.text_utf8.v1",
+          "function": "candidate_lowercase_deseret"
+        },
+        "arguments": [],
+        "step_budget": 1000000
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1104491424,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "maximum-expansion-within-input-bound",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.std.text_utf8.v1",
+          "function": "candidate_lowercase_expansion_bound"
+        },
+        "arguments": [],
+        "step_budget": 1000000
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 97050135,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "contextual-final-sigma",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.std.text_utf8.v1",
+          "function": "candidate_lowercase_final_sigma"
+        },
+        "arguments": [],
+        "step_budget": 1000000
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1530475725,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "nonfinal-sigma",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.std.text_utf8.v1",
+          "function": "candidate_lowercase_nonfinal_sigma"
+        },
+        "arguments": [],
+        "step_budget": 1000000
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1201036540,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "case-ignorable-after-sigma",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.std.text_utf8.v1",
+          "function": "candidate_lowercase_sigma_with_ignorable_after"
+        },
+        "arguments": [],
+        "step_budget": 1000000
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1309260420,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "case-ignorable-before-sigma",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.std.text_utf8.v1",
+          "function": "candidate_lowercase_sigma_with_ignorable_before"
+        },
+        "arguments": [],
+        "step_budget": 1000000
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1298184068,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "sigma-without-preceding-cased",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.std.text_utf8.v1",
+          "function": "candidate_lowercase_sigma_without_preceding_cased"
+        },
+        "arguments": [],
+        "step_budget": 1000000
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 1005695548,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "invalid-utf8",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.std.text_utf8.v1",
+          "function": "candidate_lowercase_invalid_utf8"
+        },
+        "arguments": [],
+        "step_budget": 1000000
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": -1,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "truncated-utf8",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.std.text_utf8.v1",
+          "function": "candidate_lowercase_truncated_utf8"
+        },
+        "arguments": [],
+        "step_budget": 1000000
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": -1,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "input-over-bound",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.std.text_utf8.v1",
+          "function": "candidate_lowercase_input_too_wide"
+        },
+        "arguments": [],
+        "step_budget": 1000000
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": -1,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

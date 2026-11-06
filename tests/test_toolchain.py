@@ -6,6 +6,7 @@ Skipped with a clear message when no toolchain is present.
 
 import json
 import os
+import shutil
 import subprocess
 
 import pytest
@@ -185,6 +186,65 @@ def test_text_utf8_whitespace_contract_executes_on_cranelift(
         case["status"] == "returned" and case["expectation_met"] is True
         for case in whitespace_cases
     )
+
+
+def test_text_utf8_unicode_lowercase_contract_executes_on_cranelift(
+    root, library_root, mncs_bin, tmp_path
+):
+    source = os.path.join(root, "library", "std", "text_utf8.mncs")
+    corpus = os.path.join(root, "examples", "execution", "text-utf8-lowercase-corpus.json")
+    result = run_mncs(
+        mncs_bin,
+        [
+            "experiment", "run", source,
+            "--backend", "cranelift", "--corpus", corpus,
+            "--output-dir", str(tmp_path / "text-utf8-lowercase"),
+        ],
+        library_root,
+    )
+    result_path = tmp_path / "text-utf8-lowercase/result.json"
+    report = json.loads(result_path.read_text(encoding="utf-8")) if result_path.exists() else {}
+    cases = report.get("cases", [])
+    failures = [
+        {
+            "case_id": case["case_id"],
+            "status": case["status"],
+            "returned": case.get("returned"),
+            "expected": case.get("expected"),
+        }
+        for case in cases
+        if case["status"] != "returned" or case["expectation_met"] is not True
+    ]
+    assert result.returncode == 0 and len(cases) == 12 and not failures, (
+        f"exit={result.returncode}, status={report.get('status')}, "
+        f"failures={failures}, stderr={result.stderr[-2000:]}"
+    )
+    assert report.get("status") == "UNKNOWN"
+    assert report["compiler_study"]["compilation_status"] == "completed_with_unresolved_obligations"
+    assert report["compiler_study"]["unresolved_obligations"]
+    assert report["translation_validations"]
+    assert all(
+        validation["judgement"] == "PASS"
+        for validation in report["translation_validations"]
+    )
+
+
+def test_text_utf8_unicode_tables_are_reproducible(root, tmp_path):
+    rustc = shutil.which("rustc")
+    if rustc is None:
+        pytest.skip("rustc is required to verify generated Unicode tables")
+    generator = tmp_path / "generate-unicode-lowercase"
+    compiled = subprocess.run(
+        [rustc, "--edition=2021", "tools/generate_unicode_lowercase.rs", "-o", str(generator)],
+        cwd=root,
+        capture_output=True,
+        text=True,
+    )
+    assert compiled.returncode == 0, compiled.stderr
+    checked = subprocess.run(
+        [str(generator), "--check"], cwd=root, capture_output=True, text=True
+    )
+    assert checked.returncode == 0, checked.stderr
 
 
 def test_sort_contract_executes_on_cranelift(root, library_root, mncs_bin, tmp_path):

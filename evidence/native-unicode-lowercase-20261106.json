@@ -1,0 +1,96 @@
+{
+  "schema_version": "mncs.development-evidence/1",
+  "campaign_id": "cmp_luna_native_ecosystem_20261106_0856z",
+  "session_id": "ses_3a641899b207ec26",
+  "environment_id": "renv_f68fc48fc3eae30a",
+  "work_intent_id": "int_d6f32f003a883dab",
+  "claim_id": "claim:mncs-stdlib:worktree:a7fbb5686692",
+  "responsibility": "Add versioned full Unicode lowercase to MNCS Stdlib so Language Service can remove host String::to_lowercase from bounded workspace-symbol matching.",
+  "baseline": {
+    "repository": "mncs-stdlib",
+    "commit": "6de89672f573eefc7e0982c715d685399c56cff1",
+    "bundle_identity": "mncs:stdlib-bundle:531e253cfdb8ffaa4139fead626db60f94e3878edebaa615d377f843a4d5c831"
+  },
+  "implementation": {
+    "module": {
+      "name": "mncs.std.text_utf8.v1",
+      "path": "library/std/text_utf8.mncs",
+      "profile": "0.13",
+      "sha256": "e1be1e5c4fc75571e82276d2343ff38ece1df20df326f63c6d821abfa19a67c3"
+    },
+    "api": {
+      "name": "lowercase_64",
+      "input_bytes_max": 64,
+      "output_bytes_max": 192,
+      "invalid_or_overbound_output": "valid=false, length=0, zero-padded bytes",
+      "semantics": "Unicode 17.0 full default lowercase, including context-sensitive Final_Sigma; no locale tailoring or Unicode normalization"
+    },
+    "generated_data": {
+      "unicode_version": "17.0.0",
+      "source_toolchain": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+      "lowercase_scalar_mappings": 1488,
+      "cased_and_case_ignorable_ranges": 628,
+      "generator": "tools/generate_unicode_lowercase.rs",
+      "property_helper": "tools/generate_unicode_case_properties.rs",
+      "reproducible_check": "tools/generate_unicode_lowercase.rs --check"
+    },
+    "consumer_changes": [
+      "Language Service has not yet adopted this API; the next vertical slice will wire it into mncs/filter_query.mncs and remove bounded-path host lowercase caches."
+    ]
+  },
+  "distribution": {
+    "bundle_identity": "mncs:stdlib-bundle:291719b9f9abba7514f94bff80f0e5c8a90bf77dcc45d93a21e0ab8360430a34",
+    "bundle_sha256": "944c21dbeda7ffb2d00fa7198ed31cae49c501a792d3537c23a3ac2fb056e653",
+    "manifest_sha256": "1eb992dbae6f3846de1978f887997650449b54b50617059adb79f3b31dd3f3c4",
+    "module_count": 65,
+    "generated_and_verified": true
+  },
+  "verification": {
+    "compiler_binary": "/home/epi13/Documents/Projects/mncs-language/target/release/mncs",
+    "compiler_binary_sha256": "cc06a0576e04378131af28a75098895638e322118ab8bb6d3ff7f94c87ca1dcd",
+    "compiler_source_revision": "f8212ed8b7478196b5293a84152154be5e0bea3f",
+    "module_validation": {
+      "command": "MNCS_LIBRARY_PATH=<worktree>/library mncs validate library/std/text_utf8.mncs",
+      "valid": true,
+      "errors": 0
+    },
+    "lowercase_cranelift_corpus": {
+      "path": "examples/execution/text-utf8-lowercase-corpus.json",
+      "sha256": "e89d6ad72d25fe7ed1d917c95b91fd69cd94cef60af98058f81a31269ddb3b5c",
+      "cases": 12,
+      "all_returned_expected_values": true,
+      "includes": [
+        "ASCII",
+        "U+0130 multi-scalar expansion",
+        "supplementary Deseret uppercase",
+        "64-byte input producing the 96-byte expansion bound",
+        "contextual final and nonfinal Greek sigma",
+        "Case_Ignorable context on both sides of sigma",
+        "invalid, truncated, and over-bound UTF-8"
+      ],
+      "experiment_identity": "mncs:language:experiment:result:ad66e9ab32f9affa1de0553cd41b0ed5382a4eff0c48acd1fa48c89e4533187c",
+      "translation_validation_identity": "mncs:compiler:translation-validation:29d5ca5f8e496b87251814c147c804db9cb13de8d51099f85817a6a374cf2d3d",
+      "translation_validation": "PASS",
+      "aggregate_status": "UNKNOWN",
+      "unresolved_compiler_obligations": 993,
+      "unresolved_reason": "compilation retained required integer-overflow obligations",
+      "cranelift_artifact_bytes": 35952119
+    },
+    "existing_utf8_whitespace_corpus": {
+      "path": "examples/execution/text-utf8-corpus.json",
+      "cases_checked": 44,
+      "all_returned_expected_values": true
+    },
+    "reproducibility_and_distribution": {
+      "unicode_generator_check": "passed",
+      "bundle_regeneration_and_verification": "passed",
+      "bundle_freshness_check": "passed",
+      "manifest_and_module_tests": "15 passed"
+    }
+  },
+  "limits": [
+    "The behavioral corpus and independent body/SSA/backend comparison pass, but the aggregate Language Experiment remains UNKNOWN while the compiler retains 993 integer-overflow obligations.",
+    "This Stdlib slice is not a completed host-language migration until Language Service consumes it in production and retires its bounded host lowercase path.",
+    "Inputs longer than 64 UTF-8 bytes require the existing consumer compatibility fallback."
+  ]
+}
