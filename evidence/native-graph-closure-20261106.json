@@ -1,0 +1,51 @@
+{
+  "schema_version": "mncs.native-consumption-evidence/1",
+  "campaign_id": "cmp_luna_native_ecosystem_20261106_0856z",
+  "session_id": "ses_df36bedc4527f31e",
+  "work_intent_id": "int_d6f32f003a883dab",
+  "repository": "mncs-stdlib",
+  "branch": "campaign/luna-max-stdlib-graph-closure-20261106",
+  "checkout_identity": "checkout:61a4e261292b5258",
+  "implementation": {
+    "module": "mncs.std.relation_walk.v1",
+    "source_path": "library/std/relation_walk.mncs",
+    "source_content_sha256": "48ead4d4866a49bdfce74f2b613b7361d395284aeee65bd22e4771b640d3ac7b",
+    "bundle_identity": "mncs:stdlib-bundle:4f6ee16b488006297ec7f6eea4fff2657f9b222266e90d26cb4d8685122f978b",
+    "bundle_file_sha256": "728765310678c2d2977435e1b4c121a7335808414bcf98d5b21fff38d6dcfc9c",
+    "responsibilities": [
+      "first-visit admission and cycle suppression",
+      "incremental breadth-first frontier accumulation",
+      "bounded 64-candidate transitions",
+      "1024-result budget and explicit truncation",
+      "fail-closed validation of compact node codes and depth bounds"
+    ],
+    "root_sentinel": 1024,
+    "result_codes": "0..1023"
+  },
+  "defect_repaired": {
+    "description": "A duplicate root-sentinel candidate used the already-seen root flag to set result seen slot zero. That could suppress the first real result node and make the returned seen count inconsistent.",
+    "change": "Only the previous result-slot value or admission of a non-root result code can update the result seen table.",
+    "independent_contract": "The consumer corpus checks that revisiting root leaves seen[0] false while duplicate and cycle cases still return the expected frontier."
+  },
+  "verification": [
+    {
+      "command": "MNCS_BIN=/home/epi13/Documents/Projects/mncs-language/target/release/mncs ./tools/regen.sh",
+      "status": "PASS",
+      "result": "65 modules bundled and verified; generated manifest refreshed"
+    },
+    {
+      "command": "MNCS_BIN=/home/epi13/Documents/Projects/mncs-language/target/release/mncs MNCS_LIBRARY_PATH=<campaign-library> python3 -m pytest -q tests/test_toolchain.py::test_relation_walk_contract_executes_on_cranelift",
+      "status": "PASS",
+      "result": "1 passed in 3.21s; corpus expectations include root-cycle integrity, duplicate suppression, depth frontier, result cap, full 1024-node capacity, invalid codes, and empty-depth reset"
+    },
+    {
+      "command": "MNCS_BIN=/home/epi13/Documents/Projects/mncs-language/target/release/mncs MNCS_LIBRARY_PATH=<campaign-library> python3 -m pytest -q",
+      "status": "PASS",
+      "result": "35 passed in 105.20s"
+    }
+  ],
+  "status": "verified",
+  "limitations": [
+    "Cranelift corpus execution and the existing Stdlib suite provide bounded behavioral evidence, not a proof of universal equivalence."
+  ]
+}

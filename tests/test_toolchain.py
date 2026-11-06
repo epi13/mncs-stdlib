@@ -188,6 +188,37 @@ def test_sort_contract_executes_on_cranelift(root, library_root, mncs_bin, tmp_p
     )
 
 
+def test_relation_walk_contract_executes_on_cranelift(
+    root, library_root, mncs_bin, tmp_path
+):
+    source = os.path.join(root, "examples/source/relation-walk-consumer.mncs")
+    corpus = os.path.join(root, "examples/execution/relation-walk-corpus.json")
+    result = run_mncs(
+        mncs_bin,
+        [
+            "experiment", "run", source,
+            "--backend", "cranelift", "--corpus", corpus,
+            "--output-dir", str(tmp_path / "relation-walk"),
+        ],
+        library_root,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    with open(tmp_path / "relation-walk/result.json", encoding="utf-8") as handle:
+        report = json.load(handle)
+    cases = {case["case_id"]: case for case in report["cases"]}
+    assert {
+        "duplicate-cycle-depth-frontier",
+        "result-budget-truncation",
+        "full-1024-node-frontier-capacity",
+        "invalid-code-fails-closed",
+        "empty-depth-still-resets-frontier",
+    } <= cases.keys()
+    assert all(
+        case["status"] == "returned" and case["expectation_met"] is True
+        for case in cases.values()
+    )
+
+
 def test_missing_library_fails_closed(root, mncs_bin):
     consumer = os.path.join(root, "examples", "source", "library-consumer.mncs")
     env = dict(os.environ)

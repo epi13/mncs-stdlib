@@ -1,0 +1,121 @@
+{
+  "schema_version": "0.1",
+  "name": "relation-walk",
+  "cases": [
+    {
+      "id": "duplicate-cycle-depth-frontier",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.example.relation_walk_consumer.v1",
+          "function": "candidate_duplicate_cycle"
+        },
+        "arguments": [],
+        "step_budget": 2000000
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 2030113,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "result-budget-truncation",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.example.relation_walk_consumer.v1",
+          "function": "candidate_budget"
+        },
+        "arguments": [],
+        "step_budget": 2000000
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 221,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "full-1024-node-frontier-capacity",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.example.relation_walk_consumer.v1",
+          "function": "candidate_full_capacity"
+        },
+        "arguments": [],
+        "step_budget": 8000000
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 10250251,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "invalid-code-fails-closed",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.example.relation_walk_consumer.v1",
+          "function": "candidate_invalid_code"
+        },
+        "arguments": [],
+        "step_budget": 2000000
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 100,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "empty-depth-still-resets-frontier",
+      "request": {
+        "schema_version": "0.1",
+        "target": {
+          "module": "mncs.example.relation_walk_consumer.v1",
+          "function": "candidate_empty_frontier_round"
+        },
+        "arguments": [],
+        "step_budget": 2000000
+      },
+      "expected": [
+        {
+          "integer": {
+            "value": 117,
+            "type": {
+              "bits": 64,
+              "signed": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

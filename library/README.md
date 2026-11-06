@@ -78,6 +78,7 @@ form of this table.
 | `std/platform.mncs` | `mncs.std.platform.v1` | 0.6 | mncs.std.platform — portable finite-domain platform vocabulary. |
 | `std/process.mncs` | `mncs.std.process.v1` | 0.19 | mncs.std.process — the reusable typed explicit-argv process effect with bounded multi-chunk stdin. |
 | `std/relation.mncs` | `mncs.std.relation.v1` | 0.13 | mncs.std.relation — bounded deterministic edge sets with transitive closure. |
+| `std/relation_walk.mncs` | `mncs.std.relation_walk.v1` | 0.13 | Incremental bounded reachability state with native visited admission, per-depth frontiers, and explicit 1024-node truncation. |
 | `std/scope.mncs` | `mncs.std.scope.v1` | 0.13 | mncs.std.scope — deterministic structured task-scope contracts. |
 | `std/sha256.mncs` | `mncs.std.sha256.v1` | 0.14 | mncs.std.sha256 — streaming SHA-256 plus one-shot digest for up to 1024 bytes. |
 | `std/simd.mncs` | `mncs.std.simd.v1` | 0.8 | mncs.std.simd — compositional numerical kernels over semantic vectors. |

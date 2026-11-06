@@ -1,0 +1,84 @@
+mncs 0.13;
+
+module mncs.example.relation_walk_consumer.v1;
+
+use mncs.std.relation_walk.v1;
+
+fn candidate_duplicate_cycle() -> (result: i64) {
+    let empty: [u64; 64] = [0; 64];
+    let first0: [u64; 64] = replace(empty, 0, 1024);
+    let first1: [u64; 64] = replace(first0, 1, 1);
+    let first2: [u64; 64] = replace(first1, 2, 1);
+    let first_values: [u64; 64] = replace(first2, 3, 2);
+    let first: AdvanceOut = walk_advance(walk_start(1024), first_values, 4, 1, 1024);
+
+    let second0: [u64; 64] = replace(empty, 0, 2);
+    let second1: [u64; 64] = replace(second0, 1, 3);
+    let second2: [u64; 64] = replace(second1, 2, 1);
+    let second_values: [u64; 64] = replace(second2, 3, 3);
+    let second: AdvanceOut = walk_advance(first.state, second_values, 4, 2, 1024);
+
+    let first_mask: i64 = select(first.accepted[1], 1, 0)
+        +% (select(first.accepted[3], 2, 0));
+    let root_slot_penalty: i64 = select(first.state.seen[0], 100000000, 0);
+    let invalid_penalty: i64 = select(second.state.valid, 0, 100000000);
+    let truncated_penalty: i64 = select(second.state.truncated, 1000000000, 0);
+    return root_slot_penalty +% invalid_penalty +% truncated_penalty
+        +% first.accepted_count as i64 * 1000000
+        +% first_mask * 10000
+        +% second.accepted_count as i64 * 100
+        +% second.state.frontier_count as i64 * 10
+        +% second.state.frontier[0] as i64;
+}
+
+fn candidate_budget() -> (result: i64) {
+    let empty: [u64; 64] = [0; 64];
+    let first: [u64; 64] = replace(empty, 0, 4);
+    let second: [u64; 64] = replace(first, 1, 5);
+    let candidates: [u64; 64] = replace(second, 2, 6);
+    let out: AdvanceOut = walk_advance(walk_start(1024), candidates, 3, 1, 2);
+    let invalid_penalty: i64 = select(out.state.valid, 0, 10000);
+    return invalid_penalty +% out.accepted_count as i64 * 100
+        +% out.state.frontier_count as i64 * 10
+        +% select(out.state.truncated, 1, 0);
+}
+
+fn batch_from(base: u64) -> (result: [u64; 64]) {
+    let empty: [u64; 64] = [0; 64];
+    iterate i over empty carrying values: [u64; 64] = empty {
+        next values = replace(values, i, base +% i);
+    }
+    return values;
+}
+
+fn candidate_full_capacity() -> (result: i64) {
+    let rounds: [u64; 16] = [0; 16];
+    iterate round over rounds carrying state: WalkState = walk_start(1024) {
+        let base: u64 = round *% 64;
+        let values: [u64; 64] = batch_from(base);
+        let out: AdvanceOut = walk_advance(state, values, 64, 1, 1024);
+        next state = out.state;
+    }
+    let invalid_penalty: i64 = select(state.valid, 0, 1000000000);
+    return invalid_penalty +% state.frontier_count as i64 * 10000
+        +% state.reached_count as i64 * 10
+        +% select(state.truncated, 1, 0);
+}
+
+fn candidate_invalid_code() -> (result: i64) {
+    let empty: [u64; 64] = [0; 64];
+    let candidates: [u64; 64] = replace(empty, 0, 1025);
+    let out: AdvanceOut = walk_advance(walk_start(1024), candidates, 1, 1, 1024);
+    return select(out.state.valid, 0, 100) +% out.accepted_count as i64;
+}
+
+fn candidate_empty_frontier_round() -> (result: i64) {
+    let empty: [u64; 64] = [0; 64];
+    let first: AdvanceOut = walk_advance(walk_start(1024), empty, 0, 1, 1024);
+    let candidates: [u64; 64] = replace(empty, 0, 17);
+    let second: AdvanceOut = walk_advance(first.state, candidates, 1, 2, 1024);
+    let invalid_penalty: i64 = select(second.state.valid, 0, 1000000);
+    return invalid_penalty +% first.state.frontier_count as i64 * 10000
+        +% second.state.frontier_count as i64 * 100
+        +% second.state.frontier[0] as i64;
+}
