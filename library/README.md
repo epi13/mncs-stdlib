@@ -1,6 +1,6 @@
 # MNCS standard library — module catalog
 
-This tree is the library itself: 62 MNCS modules, semantically
+This tree is the library itself: 64 MNCS modules, semantically
 authoritative at the MNCS level. Consumers bind to these modules by
 identity and bounded agreement, never by re-implementing the same
 helpers ad hoc.
@@ -89,6 +89,8 @@ form of this table.
 | `std/text_utf8.mncs` | `mncs.std.text_utf8.v1` | 0.13 | mncs.std.text_utf8 — bounded UTF-8 validation, scalar stepping, Unicode White_Space classification, and a deliberately small case fold over byte views. |
 | `std/text_view.mncs` | `mncs.std.text_view.v1` | 0.10 | mncs.std.text_view — bounded, host-neutral text references. |
 | `std/token_set.mncs` | `mncs.std.token_set.v1` | 0.13 | mncs.std.token_set — deterministic bounded token-set algebra. |
+| `std/utf8_primitives.mncs` | `mncs.std.utf8_primitives.v1` | 0.10 | Shared UTF-8 lead, continuation, and range checks for streaming consumers. |
+| `std/utf8_scalar.mncs` | `mncs.std.utf8_scalar.v1` | 0.13 | Bounded scalar stepping and Unicode White_Space classification. |
 | `family/coherence.mncs` | `mncs.family.coherence.v01` | 0.13 | mncs.family.coherence — the MNCS-native decision core of the family coherence system. |
 | `family/journal.mncs` | `mncs.family.journal.v1` | 0.10 | mncs.family.journal.v1 — the MNCS-native decision core for canonical Journal progress events. |
 | `family/rfc_status.mncs` | `mncs.family.rfc_status.v1` | 0.10 | mncs.family.rfc_status.v1 — the MNCS-native decision core for RFC status claims. |

@@ -1,0 +1,78 @@
+{
+  "schema_version": "mncs.development-evidence/1",
+  "campaign_id": "cmp_luna_max_native_ecosystem_20261105_0400z",
+  "session_id": "ses_a159eed2fa9b745d",
+  "environment_id": "renv_f09d2af8d97be669",
+  "work_intent_id": "int_d6f32f003a883dab",
+  "scope_grant_id": "scope_326568516d90bb7a",
+  "claim_id": "claim:mncs-stdlib:worktree:59ebf962b0f3",
+  "responsibility": "Provide a small reusable MNCS UTF-8 scalar and whitespace kernel shared by text and JSON consumers.",
+  "baseline": {
+    "repository": "mncs-stdlib",
+    "commit": "497dfc626350801a58bed977946afd24495dbfaa",
+    "bundle_identity": "mncs:stdlib-bundle:5e536e12cca8a426bbe9293600903c2816da1b76b710a99e77c3a5251547af67"
+  },
+  "implementation": {
+    "modules": [
+      {
+        "name": "mncs.std.utf8_primitives.v1",
+        "path": "library/std/utf8_primitives.mncs",
+        "profile": "0.10",
+        "sha256": "6f6cf43073cbd7d0e2fe22977845b38311dc3a61e2b8806607b4c4ab8c267a45"
+      },
+      {
+        "name": "mncs.std.utf8_scalar.v1",
+        "path": "library/std/utf8_scalar.mncs",
+        "profile": "0.13",
+        "sha256": "43821c9e71cd5ac64d49baed55501ceacbfe4290c54bf3068f23474c4abae28c"
+      }
+    ],
+    "consumer_changes": [
+      "text_utf8 now imports the shared lead/continuation predicates and scalar/White_Space kernel; its duplicate decoder and classifier were removed.",
+      "json_cursor now imports the shared lead/continuation predicates; its duplicate byte predicates were removed."
+    ]
+  },
+  "distribution": {
+    "bundle_identity": "mncs:stdlib-bundle:363c0966b4414604f6a9a730ebcdf10dbdf6ff21f64e6f4c0d9bcf171546dcf9",
+    "bundle_sha256": "188481201612d717ba3a9699369c4c6a08a0569b1253c1d08b54803d0afd931d",
+    "manifest_sha256": "d2819f6e93dc90eb83f6fc393dae1ef968dc21e3997dd36de25a7459ef12bbdc",
+    "module_count": 64,
+    "generated_and_verified": true
+  },
+  "verification": {
+    "compiler_binary_sha256": "cc06a0576e04378131af28a75098895638e322118ab8bb6d3ff7f94c87ca1dcd",
+    "full_suite": {
+      "command": "MNCS_BIN=<selected-mncs> python3 -m pytest tests/ -q",
+      "passed": 34,
+      "failed": 0,
+      "skipped": 0,
+      "elapsed_seconds": 101.97
+    },
+    "text_utf8_corpus": {
+      "path": "examples/execution/text-utf8-corpus.json",
+      "sha256": "3c9c03cda5b209706aefb16f4e69439f04c3289cbdf9da61fe77323821cb3094",
+      "cases": 61,
+      "all_returned_expected_values": true,
+      "aggregate_status": "UNKNOWN",
+      "unresolved_reasons": ["compilation retained required unresolved obligations"]
+    },
+    "json_cursor_corpus": {
+      "path": "examples/execution/json-cursor-corpus.json",
+      "sha256": "b3f1e9263b127ba87dc2d35446c788686ae2efdd0570873a0248b06bc45aadbe",
+      "cases": 28,
+      "all_returned_expected_values": true,
+      "aggregate_status": "UNKNOWN",
+      "unresolved_reasons": ["compilation retained required unresolved obligations"]
+    },
+    "bundle_regeneration_and_verification": "passed"
+  },
+  "integration_status": {
+    "text_utf8": "integrated; imports the shared scalar and primitive modules",
+    "json_cursor": "integrated; imports the shared primitive module",
+    "doctor_version_parser": "pending; follow-up will bind the native consumer to utf8_scalar directly and measure family artifact size"
+  },
+  "limits": [
+    "The direct experiment corpora returned their independently specified values, but their aggregate formal status remains UNKNOWN because compiler obligations remain unresolved.",
+    "Doctor consumer adoption and its frozen family artifact-size comparison are pending."
+  ]
+}

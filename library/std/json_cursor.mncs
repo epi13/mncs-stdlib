@@ -24,6 +24,7 @@ mncs 0.10;
 module mncs.std.json_cursor.v1;
 
 use mncs.std.json.v1 as json;
+use mncs.std.utf8_primitives.v1;
 
 record Cursor {
     position: u64,
@@ -199,27 +200,6 @@ fn hex_value(value: byte) -> (result: u64) {
     if n >= 48 && n <= 57 { return (n - 48) as u64; }
     if n >= 65 && n <= 70 { return (n - 55) as u64; }
     return (n - 87) as u64;
-}
-
-fn is_utf8_continuation(value: byte) -> (result: bool) {
-    let n: i64 = value as i64;
-    return n >= 128 && n <= 191;
-}
-
-fn utf8_lead_need(value: byte) -> (result: byte) {
-    let n: i64 = value as i64;
-    if n >= 194 && n <= 223 { return 1; }
-    if n >= 224 && n <= 239 { return 2; }
-    if n >= 240 && n <= 244 { return 3; }
-    return 0;
-}
-
-fn utf8_first_continuation_valid(lead: byte, value: byte) -> (result: bool) {
-    if lead == 224 { return value >= 160 && value <= 191; }
-    if lead == 237 { return value >= 128 && value <= 159; }
-    if lead == 240 { return value >= 144 && value <= 191; }
-    if lead == 244 { return value >= 128 && value <= 143; }
-    return is_utf8_continuation(value);
 }
 
 fn string_byte(state: Cursor, value: byte) -> (result: Cursor) {

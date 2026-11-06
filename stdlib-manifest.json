@@ -1,8 +1,8 @@
 {
-  "bundle_identity": "mncs:stdlib-bundle:5e536e12cca8a426bbe9293600903c2816da1b76b710a99e77c3a5251547af67",
+  "bundle_identity": "mncs:stdlib-bundle:363c0966b4414604f6a9a730ebcdf10dbdf6ff21f64e6f4c0d9bcf171546dcf9",
   "bundle_path": "dist/stdlib-bundle.json",
   "library_path": "library",
-  "module_count": 62,
+  "module_count": 64,
   "modules": [
     {
       "content_sha256": "ed11a325208e0450ad196998c297f33ac2cae3f810ea29089f9cdd07ac6d0f62",
@@ -360,9 +360,10 @@
       "profile": "0.13"
     },
     {
-      "content_sha256": "6c2c6355db3d05791218d42dc41e5c39954a15e43dd445aa341de27f4eef7564",
+      "content_sha256": "e6fee104e4719fc1829bd9f75a90db71ab6e370ad7055902feb4a0cb36494eb4",
       "imports": [
-        "mncs.std.json.v1"
+        "mncs.std.json.v1",
+        "mncs.std.utf8_primitives.v1"
       ],
       "name": "mncs.std.json_cursor.v1",
       "path": "std/json_cursor.mncs",
@@ -473,9 +474,10 @@
       "profile": "0.13"
     },
     {
-      "content_sha256": "a815b3d956f8da9e5e4cb73bcd082e56b211cb77f2fff52ee5a6158a9cf79bbd",
+      "content_sha256": "e785089a097c3541332ad2546de027b8f5d232dd16f1d480b896a2f9984b4775",
       "imports": [
-        "mncs.std.json_cursor.v1"
+        "mncs.std.utf8_primitives.v1",
+        "mncs.std.utf8_scalar.v1"
       ],
       "name": "mncs.std.text_utf8.v1",
       "path": "std/text_utf8.mncs",
@@ -494,6 +496,22 @@
       "name": "mncs.std.token_set.v1",
       "path": "std/token_set.mncs",
       "profile": "0.13"
+    },
+    {
+      "content_sha256": "6f6cf43073cbd7d0e2fe22977845b38311dc3a61e2b8806607b4c4ab8c267a45",
+      "imports": [],
+      "name": "mncs.std.utf8_primitives.v1",
+      "path": "std/utf8_primitives.mncs",
+      "profile": "0.10"
+    },
+    {
+      "content_sha256": "43821c9e71cd5ac64d49baed55501ceacbfe4290c54bf3068f23474c4abae28c",
+      "imports": [
+        "mncs.std.utf8_primitives.v1"
+      ],
+      "name": "mncs.std.utf8_scalar.v1",
+      "path": "std/utf8_scalar.mncs",
+      "profile": "0.13"
     }
   ],
   "repository": "mncs-stdlib",
@@ -502,5 +520,5 @@
     "min": "0.5"
   },
   "schema_version": "mncs.stdlib-manifest/1",
-  "source_commit": "400a24e"
+  "source_commit": "497dfc6"
 }

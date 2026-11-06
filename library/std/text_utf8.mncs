@@ -4,11 +4,9 @@ mncs 0.13;
 // deliberately small case fold over byte views.
 //
 // INGEST-P-003: `text_view`/`text_scan` trade in producer-attested validity
-// flags, while `json_cursor` performs real lead/continuation validation
-// internally. This module is the coherent reusable substrate extracted
-// from that in-tree material: it imports the three lead/continuation
-// predicates from `mncs.std.json_cursor.v1` (no second decoder) and layers
-// the total bounded operations ingest needs on top.
+// flags. This module layers total bounded text validation and folding over
+// shared UTF-8 byte predicates and scalar decoding. JSON cursor state remains
+// independent and consumes the same byte predicates.
 //
 // Scope discipline (explicit non-goals):
 // - validation reports the first bad byte index (`-1` = valid); it never
@@ -27,11 +25,8 @@ mncs 0.13;
 // module's candidates, following the `text_scan`/`text_map` convention).
 module mncs.std.text_utf8.v1;
 
-use mncs.std.json_cursor.v1;
-
-// One decoded scalar: the scalar value, the position after it, and whether
-// position `at` started a well-formed scalar inside the live window.
-record ScalarStep { scalar: u32, next: u64, valid: bool }
+use mncs.std.utf8_primitives.v1;
+use mncs.std.utf8_scalar.v1;
 
 // Fold state for window validation: outstanding continuation bytes, the
 // lead awaiting its range-checked first continuation (`0` = none), and the
@@ -87,82 +82,6 @@ fn validate_generic<N: Nat>(view: [byte; up_to N], view_length: u64) -> (result:
         return window as i64;
     }
     return -1;
-}
-
-// Decode the scalar starting at `at`: ASCII passes through, 2-/3-/4-byte
-// leads decode through the same range table the validator uses (overlongs,
-// surrogates, and >U+10FFFF fail closed). Malformed input yields
-// `valid = false` with `next = at + 1` so callers always make progress;
-// `at` past the window yields `valid = false` with `next = at`.
-fn step_scalar_generic<N: Nat>(view: [byte; up_to N], view_length: u64, at: u64) -> (result: ScalarStep) {
-    let window: u64 = select(view_length <= view.len, view_length, view.len);
-    if at >= window {
-        return ScalarStep { scalar: 0, next: at, valid: false };
-    }
-    let b0: u64 = view[at] as u64;
-    if b0 < 128 {
-        return ScalarStep { scalar: b0 as u32, next: at + 1, valid: true };
-    }
-    let need: u64 = utf8_lead_need(view[at]) as u64;
-    if need == 0 {
-        return ScalarStep { scalar: 0, next: at + 1, valid: false };
-    }
-    if need == 1 {
-        if at + 1 >= window {
-            return ScalarStep { scalar: 0, next: at + 1, valid: false };
-        }
-        let b1: u64 = view[at + 1] as u64;
-        if !utf8_first_continuation_valid(view[at], view[at + 1]) {
-            return ScalarStep { scalar: 0, next: at + 1, valid: false };
-        }
-        let scalar: u64 = (b0 - 192) * 64 + b1 % 64;
-        return ScalarStep { scalar: scalar as u32, next: at + 2, valid: true };
-    }
-    if need == 2 {
-        if at + 2 >= window {
-            return ScalarStep { scalar: 0, next: at + 1, valid: false };
-        }
-        if !utf8_first_continuation_valid(view[at], view[at + 1]) {
-            return ScalarStep { scalar: 0, next: at + 1, valid: false };
-        }
-        let b1: u64 = view[at + 1] as u64;
-        let b2: u64 = view[at + 2] as u64;
-        if !is_utf8_continuation(view[at + 2]) {
-            return ScalarStep { scalar: 0, next: at + 1, valid: false };
-        }
-        let scalar: u64 = (b0 - 224) * 4096 + (b1 % 64) * 64 + b2 % 64;
-        return ScalarStep { scalar: scalar as u32, next: at + 3, valid: true };
-    }
-    if at + 3 >= window {
-        return ScalarStep { scalar: 0, next: at + 1, valid: false };
-    }
-    if !utf8_first_continuation_valid(view[at], view[at + 1]) {
-        return ScalarStep { scalar: 0, next: at + 1, valid: false };
-    }
-    let c1: u64 = view[at + 1] as u64;
-    let c2: u64 = view[at + 2] as u64;
-    let c3: u64 = view[at + 3] as u64;
-    if !is_utf8_continuation(view[at + 2]) {
-        return ScalarStep { scalar: 0, next: at + 1, valid: false };
-    }
-    if !is_utf8_continuation(view[at + 3]) {
-        return ScalarStep { scalar: 0, next: at + 1, valid: false };
-    }
-    let wide: u64 = (b0 - 240) * 262144 + (c1 % 64) * 4096 + (c2 % 64) * 64 + c3 % 64;
-    return ScalarStep { scalar: wide as u32, next: at + 4, valid: true };
-}
-
-// Classify one Unicode scalar using the Unicode White_Space property.
-// Values outside the scalar range, including surrogates, are not whitespace.
-fn is_whitespace_scalar(scalar: u32) -> (result: bool) {
-    let value: u64 = scalar as u64;
-    if value >= 9 && value <= 13 { return true; }
-    if value == 32 || value == 133 || value == 160 || value == 5760 { return true; }
-    if value >= 8192 && value <= 8202 { return true; }
-    if value == 8232 || value == 8233 || value == 8239 || value == 8287 || value == 12288 {
-        return true;
-    }
-    return false;
 }
 
 // Deliberately bounded case fold over one scalar: ASCII A-Z gains 0x20,
